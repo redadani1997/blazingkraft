@@ -1,0 +1,398 @@
+openapi: 3.0.0
+info:
+  description: Topic Api Documentation
+  version: 0.1.0
+  title: Topic Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Topic
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Get topic Details
+  /v1/admin/topics/{topic}/details:
+    get:
+      parameters:
+        - in: path
+          name: topic
+          required: true
+          schema:
+            type: string
+      tags:
+        - Topic
+      summary: Topic Details
+      operationId: getTopicDetails
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TopicDetailsApiResponse"
+
+  # Get topic description
+  /v1/admin/topics/{topic}/description:
+    get:
+      parameters:
+        - in: path
+          name: topic
+          required: true
+          schema:
+            type: string
+      tags:
+        - Topic
+      summary: Describe Topic
+      operationId: describeTopic
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TopicDescriptionApiResponse"
+
+  # Get topic descriptions
+  /v1/admin/topics/descriptions:
+    # Get all topic descriptions
+    get:
+      tags:
+        - Topic
+      summary: Describe All Topics
+      operationId: describeAllTopics
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TopicDescriptionApiResponse"
+
+    # Get specific topic descriptions
+    post:
+      tags:
+        - Topic
+      summary: Describe Specific Topics
+      operationId: describeSpecificTopics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TopicDescriptionApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TopicDescriptionApiResponse"
+
+  # Get topic listings
+  /v1/admin/topics/listings:
+    get:
+      tags:
+        - Topic
+      summary: List All Topics
+      operationId: listAllTopics
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TopicListingApiResponse"
+
+  /v1/admin/topics/{topic}/configuration:
+    # Get topic Configuration
+    get:
+      parameters:
+        - in: path
+          name: topic
+          required: true
+          schema:
+            type: string
+      tags:
+        - Topic
+      summary: Topic Configuration
+      operationId: getTopicConfiguration
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TopicConfigurationApiResponse"
+
+    # Edit topic Configuration
+    put:
+      parameters:
+        - in: path
+          name: topic
+          required: true
+          schema:
+            type: string
+      tags:
+        - Topic
+      summary: Edit Topic Configuration
+      operationId: editTopicConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TopicConfigurationEditApiRequest"
+      responses:
+        204:
+          description: NO_CONTENT
+
+  # Increase Topic Partitions
+  /v1/admin/topics/{topic}/partitions:
+    put:
+      parameters:
+        - in: path
+          name: topic
+          required: true
+          schema:
+            type: string
+      tags:
+        - Topic
+      summary: Increase Topic Partitions
+      operationId: increaseTopicPartitions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TopicPartitionIncreaseApiRequest"
+      responses:
+        204:
+          description: NO_CONTENT
+
+  # Create topic
+  /v1/admin/topics:
+    post:
+      tags:
+        - Topic
+      summary: Create Topic
+      operationId: createTopic
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TopicCreateApiRequest"
+      responses:
+        201:
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TopicListingApiResponse"
+
+  # Delete topic
+  /v1/admin/topics/{topic}:
+    delete:
+      parameters:
+        - in: path
+          name: topic
+          required: true
+          schema:
+            type: string
+      tags:
+        - Topic
+      summary: Delete Topic
+      operationId: deleteTopic
+      responses:
+        204:
+          description: NO CONTENT
+
+  # Delete topic records
+  /v1/admin/topics/{topic}/records:
+    put:
+      parameters:
+        - in: path
+          name: topic
+          required: true
+          schema:
+            type: string
+      tags:
+        - Topic
+      summary: Delete Topic Records
+      operationId: deleteTopicRecords
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TopicDeleteRecordsApiRequest"
+      responses:
+        204:
+          description: NO_CONTENT
+
+components:
+  schemas:
+    # Requests
+    TopicCreateApiRequest:
+      type: object
+      properties:
+          name:
+            type: string
+          numPartitions:
+            type: integer
+          replicationFactor:
+            type: integer
+          configuration:
+            $ref: "#/components/schemas/CommonMap"
+    TopicPartitionIncreaseApiRequest:
+      type: object
+      properties:
+        increaseTo:
+          type: integer
+    TopicDescriptionApiRequest:
+      type: object
+      properties:
+        topicNames:
+          type: array
+          items:
+            type: string
+    TopicDeleteRecordsApiRequest:
+      type: object
+      properties:
+        partitionsOffset:
+          type: array
+          items:
+            $ref: "#/components/schemas/TopicDeleteRecordsPartitionOffsetApiRequest"
+
+    TopicConfigurationEditApiRequest:
+      type: object
+      properties:
+        configuration:
+          $ref: "#/components/schemas/CommonMap"
+
+    # Responses
+    TopicListingApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        internal:
+          type: boolean
+        topicId:
+          type: string
+    TopicDescriptionApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        topicId:
+          type: string
+        internal:
+          type: boolean
+        partitions:
+          type: array
+          items:
+            $ref: "#/components/schemas/PartitionInfoApiResponse"
+        authorizedOperations:
+          type: array
+          items:
+            type: string
+    TopicDetailsApiResponse:
+      type: object
+      properties:
+        partitionsDetails:
+          type: array
+          items:
+            $ref: "#/components/schemas/PartitionDetailsApiResponse"
+        topicDescription:
+          $ref: "#/components/schemas/TopicDescriptionApiResponse"
+        earliestOffsetInfos:
+          type: array
+          items:
+            $ref: "#/components/schemas/OffsetInfoApiResponse"
+        latestOffsetInfos:
+          type: array
+          items:
+            $ref: "#/components/schemas/OffsetInfoApiResponse"
+    PartitionDetailsApiResponse:
+        type: object
+        properties:
+          partition:
+            type: integer
+          offsetLag:
+            type: integer
+            format: int64
+          size:
+            type: integer
+            format: int64
+    TopicConfigurationApiResponse:
+      type: object
+      properties:
+        topicConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+
+    # Common
+    TopicDeleteRecordsPartitionOffsetApiRequest:
+      type: object
+      properties:
+        partition:
+          type: integer
+        offset:
+          type: integer
+    OffsetInfoApiResponse:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        timestamp:
+          type: integer
+          format: int64
+        leaderEpoch:
+          type: integer
+          format: int32
+        partition:
+          type: integer
+          format: int32
+        topic:
+          type: string
+    PartitionInfoApiResponse:
+      type: object
+      properties:
+        partition:
+          type: integer
+        leader:
+          $ref: "#/components/schemas/NodeApiResponse"
+        replicas:
+          type: array
+          items:
+            $ref: "#/components/schemas/NodeApiResponse"
+        isr:
+          type: array
+          items:
+            $ref: "#/components/schemas/NodeApiResponse"
+    NodeApiResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        idString:
+          type: string
+        host:
+          type: string
+        port:
+          type: integer
+        rack:
+          type: string
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

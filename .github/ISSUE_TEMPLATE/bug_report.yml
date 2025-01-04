@@ -1,0 +1,44 @@
+name: Report an issue with Blazing KRaft docker image
+description: Tell us if something is not working as expected
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Thanks for reaching out!
+        Before submitting an issue please make sure that there isn't already an open issue describing the same problem.
+  - type: dropdown
+    id: package
+    attributes:
+      label: What Blazing KRaft component has an issue
+      options:
+        - 'Management'
+        - 'Cluster'
+        - 'Kafka Connect'
+        - 'Schema Registry'
+        - 'KsqlDb'
+        - 'Playground'
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: What version of Blazing KRaft docker image are you using?
+    validations:
+      required: true
+  - type: dropdown
+    id: fix
+    attributes:
+      label: Do you have any idea on how to fix it?
+      options:
+        - 'Yes'
+        - 'No'
+  - type: textarea
+    id: possibleFix
+    attributes:
+      label: Possible fix

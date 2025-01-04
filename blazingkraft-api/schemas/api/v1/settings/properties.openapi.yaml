@@ -1,0 +1,73 @@
+openapi: 3.0.0
+info:
+  description: Properties Api Documentation
+  version: 0.1.0
+  title: Properties Api Documentation
+tags:
+  - name: Properties
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Get Properties
+  /v1/settings/properties:
+    get:
+      tags:
+        - Properties
+      summary: Get Properties
+      operationId: getProperties
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PropertiesApiResponse"
+
+
+components:
+  schemas:
+    # Requests
+
+
+    # Responses
+    PropertiesApiResponse:
+      type: object
+      properties:
+        oidcProviders:
+          type: array
+          items:
+            $ref: "#/components/schemas/OIDCProviderPropertiesApiResponse"
+
+    OIDCProviderPropertiesApiResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        issuer:
+          type: string
+        pkceEnabled:
+          type: boolean
+        providerType:
+          type: string
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+
+
+    # Common
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

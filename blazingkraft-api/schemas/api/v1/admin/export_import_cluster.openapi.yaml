@@ -1,0 +1,92 @@
+openapi: 3.0.0
+info:
+  description: Export Import Cluster Api Documentation
+  version: 0.1.0
+  title: Export Import Cluster Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Export Import Cluster
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Export Cluster
+  /v1/admin/clusters/{clusterCode}/export:
+    get:
+      tags:
+        - Export Import Cluster
+      parameters:
+        - name: clusterCode
+          in: path
+          required: true
+          schema:
+            type: string
+      summary: Export Cluster
+      operationId: exportCluster
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                format: byte
+
+  # IMPORT Cluster
+  /v1/admin/clusters/import:
+    post:
+      tags:
+        - Export Import Cluster
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                zipFile:
+                  type: string
+                  format: binary
+      summary: Import Cluster
+      operationId: importCluster
+      responses:
+        201:
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImportedClusterMetaApiResponse"
+
+components:
+  schemas:
+    # Requests
+
+
+    # Responses
+    ImportedClusterMetaApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        color:
+          type: string
+        schemaRegistryCode:
+          type: string
+        schemaRegistryName:
+          type: string
+        jmxEnabled:
+          type: boolean
+
+    # Common
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

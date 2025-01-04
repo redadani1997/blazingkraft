@@ -1,0 +1,270 @@
+openapi: 3.0.0
+info:
+  description: Group Api Documentation
+  version: 0.1.0
+  title: Group Api Documentation
+tags:
+  - name: Group
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /v1/management/groups:
+    # Create Group
+    post:
+      tags:
+        - Group
+      summary: Create Group
+      operationId: createGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupCreateApiRequest"
+      responses:
+        201:
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupMetaApiResponse"
+
+    # Get All Groups
+    get:
+      tags:
+        - Group
+      summary: Get All Groups
+      operationId: getAllGroups
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GroupMetaApiResponse"
+
+  # Get Group Details
+  /v1/management/groups/{code}/details:
+    get:
+      tags:
+        - Group
+      summary: Get Group Details
+      operationId: getGroupDetails
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupApiResponse"
+
+  /v1/management/groups/{code}:
+    # Edit Group
+    put:
+      tags:
+        - Group
+      summary: Edit Group
+      operationId: editGroup
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupEditApiRequest"
+      responses:
+        201:
+          description: EDITED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupMetaApiResponse"
+
+    # Delete Group
+    delete:
+      tags:
+        - Group
+      summary: Delete Group
+      operationId: deleteGroup
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: NO_CONTENT
+
+  /v1/management/groups/{code}/with-users:
+    # Delete Group
+    delete:
+      tags:
+        - Group
+      summary: Delete Group With Users
+      operationId: deleteGroupWithUsers
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: NO_CONTENT
+components:
+  schemas:
+    # Requests
+    GroupCreateApiRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        clusterPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        kafkaConnectPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        schemaRegistryPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        ksqlDbPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        managementPermissions:
+          type: array
+          items:
+            type: string
+        playgroundPermissions:
+          type: array
+          items:
+            type: string
+
+
+    GroupEditApiRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        clusterPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        kafkaConnectPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        schemaRegistryPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        ksqlDbPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        managementPermissions:
+          type: array
+          items:
+            type: string
+        playgroundPermissions:
+          type: array
+          items:
+            type: string
+
+    # Responses
+    GroupMetaApiResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        numberOfUsers:
+          type: integer
+          format: int64
+        numberOfPermissions:
+          type: integer
+          format: int64
+
+
+    GroupApiResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        creationTime:
+          type: integer
+          format: int64
+        updateTime:
+          type: integer
+          format: int64
+        createdBy:
+          type: string
+        updatedBy:
+          type: string
+        description:
+          type: string
+        clusterPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        kafkaConnectPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        schemaRegistryPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        ksqlDbPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        managementPermissions:
+          type: array
+          items:
+            type: string
+        playgroundPermissions:
+          type: array
+          items:
+            type: string
+        usersMeta:
+          type: array
+          items:
+              $ref: "#/components/schemas/GroupUserMetaApiResponse"
+
+    GroupUserMetaApiResponse:
+      type: object
+      properties:
+        email:
+          type: string
+        createdBy:
+          type: string
+        creationTime:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        updateTime:
+          type: integer
+          format: int64
+
+    # Common
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    CommonStringStringArrayMap:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          type: string
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

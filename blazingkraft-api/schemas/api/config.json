@@ -1,0 +1,8 @@
+{
+  "interfaceOnly": true,
+  "dateLibrary": "java8",
+  "useTags": true,
+  "useBeanValidation": true,
+  "skipDefaultInterface": true,
+  "useSpringBoot3": true
+}

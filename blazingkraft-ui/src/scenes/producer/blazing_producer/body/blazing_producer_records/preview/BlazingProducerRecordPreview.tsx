@@ -1,0 +1,5 @@
+import BlazingProducerRecordPreviewComponent from './BlazingProducerRecordPreviewComponent';
+
+const BlazingProducerRecordPreview = BlazingProducerRecordPreviewComponent;
+
+export default BlazingProducerRecordPreview;

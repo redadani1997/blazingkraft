@@ -1,0 +1,165 @@
+openapi: 3.0.0
+info:
+  description: Kafka Connect Plugin Api Documentation
+  version: 0.1.0
+  title: Kafka Connect Plugin Api Documentation
+tags:
+  - name: Kafka Connect Plugin
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /v1/kafka-connects/connector-plugins:
+    get:
+      tags:
+        - Kafka Connect Plugin
+      operationId: listConnectorPlugins
+      parameters:
+        - description: Whether to list only connectors instead of all plugins
+          in: query
+          name: connectorsOnly
+          schema:
+            type: boolean
+            default: true
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PluginInfoApiResponse'
+          description: default response
+      summary: List all connector plugins installed
+  /v1/kafka-connects/connector-plugins/{pluginName}/config:
+    get:
+      tags:
+        - Kafka Connect Plugin
+      operationId: getConnectorConfigDef
+      parameters:
+        - in: path
+          name: pluginName
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConfigKeyInfoApiResponse'
+          description: default response
+      summary: Get the configuration definition for the specified pluginName
+  /v1/kafka-connects/connector-plugins/{pluginName}/config/validate:
+    put:
+      tags:
+        - Kafka Connect Plugin
+      operationId: validateConfigs
+      parameters:
+        - in: path
+          name: pluginName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigInfosApiResponse'
+          description: default response
+      summary: Validate the provided configuration against the configuration definition
+        for the specified pluginName
+
+components:
+  schemas:
+    ConfigInfo:
+      type: object
+      properties:
+        definition:
+          $ref: '#/components/schemas/ConfigKeyInfoApiResponse'
+        value:
+          $ref: '#/components/schemas/ConfigValueInfo'
+    ConfigInfosApiResponse:
+      type: object
+      properties:
+        configs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfigInfo'
+        error_count:
+          type: integer
+          format: int32
+        groups:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+    ConfigKeyInfoApiResponse:
+      type: object
+      properties:
+        default_value:
+          type: string
+        dependents:
+          type: array
+          items:
+            type: string
+        display_name:
+          type: string
+        documentation:
+          type: string
+        group:
+          type: string
+        importance:
+          type: string
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        order_in_group:
+          type: integer
+          format: int32
+          writeOnly: true
+        required:
+          type: boolean
+        type:
+          type: string
+        width:
+          type: string
+    ConfigValueInfo:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+        recommended_values:
+          type: array
+          items:
+            type: string
+        value:
+          type: string
+        visible:
+          type: boolean
+    PluginInfoApiResponse:
+      type: object
+      properties:
+        class:
+          type: string
+        type:
+          type: string
+        version:
+          type: string

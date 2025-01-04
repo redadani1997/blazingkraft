@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+  description: Feature Api Documentation
+  version: 0.1.0
+  title: Files Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Files
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /v1/files:
+    # Get Files
+    get:
+      tags:
+        - Files
+      summary: Get Files
+      operationId: getFiles
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FilesApiResponse"
+
+    # Create File
+    post:
+      tags:
+        - Files
+      summary: Create File
+      operationId: createFile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/FilesCreateApiRequest"
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FilesApiResponse"
+
+  /v1/files/delete:
+    # Delete File
+    post:
+      tags:
+        - Files
+      summary: Delete File
+      operationId: deleteFile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FilesDeleteApiRequest"
+        required: true
+      responses:
+        204:
+          description: DELETED
+
+components:
+  schemas:
+    # Requests
+    FilesCreateApiRequest:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+    FilesDeleteApiRequest:
+      type: object
+      properties:
+        filePath:
+          type: string
+
+    # Responses
+    FilesApiResponse:
+      type: object
+      properties:
+        path:
+          type: string
+
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    CommonStringStringArrayMap:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          type: string
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

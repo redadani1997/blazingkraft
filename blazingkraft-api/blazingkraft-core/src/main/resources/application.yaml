@@ -1,0 +1,17 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+BLAZINGKRAFT_AUDIT_LEVEL: INFO
+
+BLAZINGKRAFT_DATASOURCE_TYPE: H2
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+
+BLAZINGKRAFT_BASE_FOLDER: /var/blazingkraft

@@ -1,0 +1,139 @@
+openapi: 3.0.0
+info:
+  description: Kafka Connect Task Api Documentation
+  version: 0.1.0
+  title: Kafka Connect Task Api Documentation
+tags:
+  - name: Kafka Connect Task
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /v1/kafka-connects/connectors/{connector}/tasks:
+    get:
+      tags:
+        - Kafka Connect Task
+      operationId: getTaskConfigs
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskInfoApiResponse'
+          description: default response
+      summary: List all tasks for the specified connector
+
+  /v1/kafka-connects/connectors/{connector}/tasks-config:
+    get:
+      tags:
+        - Kafka Connect Task
+      operationId: getTasksConfig
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    type: string
+          description: default response
+      summary: Get the configuration of all tasks for the specified connector
+
+  /v1/kafka-connects/connectors/{connector}/tasks/{task}/restart:
+    post:
+      tags:
+        - Kafka Connect Task
+      operationId: restartTask
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: task
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      summary: Restart the specified task for the specified connector
+  /v1/kafka-connects/connectors/{connector}/tasks/{task}/status:
+    get:
+      tags:
+        - Kafka Connect Task
+      operationId: getTaskStatus
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: task
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskStateApiResponse'
+          description: default response
+      summary: Get the state of the specified task for the specified connector
+components:
+  schemas:
+    ConnectorTaskIdApiResponse:
+      type: object
+      properties:
+        connector:
+          type: string
+        task:
+          type: integer
+          format: int32
+    TaskInfoApiResponse:
+      type: object
+      properties:
+        config:
+          type: object
+          additionalProperties:
+            type: string
+        id:
+          $ref: '#/components/schemas/ConnectorTaskIdApiResponse'
+    TaskStateApiResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        msg:
+          type: string
+          writeOnly: true
+        state:
+          type: string
+        trace:
+          type: string
+        worker_id:
+          type: string

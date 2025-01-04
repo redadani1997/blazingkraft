@@ -1,0 +1,258 @@
+openapi: 3.0.0
+info:
+  description: User Api Documentation
+  version: 0.1.0
+  title: User Api Documentation
+tags:
+  - name: User
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /v1/management/users:
+    # Create User
+    post:
+      tags:
+        - User
+      summary: Create User
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCreateApiRequest"
+      responses:
+        201:
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserMetaApiResponse"
+
+    # Get All Users
+    get:
+      tags:
+        - User
+      summary: Get All Users
+      operationId: getAllUsers
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserMetaApiResponse"
+
+  # Get User Details
+  /v1/management/users/{email}/details:
+    get:
+      tags:
+        - User
+      summary: Get User Details
+      operationId: getUserDetails
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserApiResponse"
+
+  /v1/management/users/{email}:
+    # Edit User
+    put:
+      tags:
+        - User
+      summary: Edit User
+      operationId: editUser
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserEditApiRequest"
+      responses:
+        201:
+          description: EDITED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserMetaApiResponse"
+    # Delete User
+    delete:
+      tags:
+        - User
+      summary: Delete User
+      operationId: deleteUser
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: NO_CONTENT
+
+  /v1/management/users/{email}/password:
+    # Edit User
+    put:
+      tags:
+        - User
+      summary: Edit User Password
+      operationId: editUserPassword
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserEditPasswordApiRequest"
+      responses:
+        201:
+          description: EDITED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserMetaApiResponse"
+
+  /v1/management/users/{email}/password/without-confirmation:
+    # Edit User
+    put:
+      tags:
+        - User
+      summary: Edit User Password Without Current
+      operationId: editUserPasswordWithoutCurrent
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserEditPasswordWithoutCurrentApiRequest"
+      responses:
+        201:
+          description: EDITED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserMetaApiResponse"
+
+components:
+  schemas:
+    # Requests
+    UserCreateApiRequest:
+      type: object
+      properties:
+        password:
+          type: string
+        passwordConfirm:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        groupCode:
+          type: string
+
+    UserEditApiRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        groupCode:
+          type: string
+
+    UserEditPasswordApiRequest:
+      type: object
+      properties:
+        currentPassword:
+          type: string
+        password:
+          type: string
+        passwordConfirm:
+          type: string
+
+    UserEditPasswordWithoutCurrentApiRequest:
+        type: object
+        properties:
+          password:
+            type: string
+          passwordConfirm:
+            type: string
+
+    # Responses
+    UserApiResponse:
+      type: object
+      properties:
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        createdBy:
+          type: string
+        creationTime:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        updateTime:
+          type: integer
+          format: int64
+        groupName:
+          type: string
+        groupCode:
+          type: string
+
+    UserMetaApiResponse:
+      type: object
+      properties:
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        groupName:
+          type: string
+        groupCode:
+          type: string
+
+
+    # Common
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

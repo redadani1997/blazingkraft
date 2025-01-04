@@ -1,0 +1,199 @@
+openapi: 3.0.0
+info:
+  description: Playground Api Documentation
+  version: 0.1.0
+  title: Playground Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Playground Schema Validation
+  - name: Playground Conversions
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Validate Schema Definition
+  /v1/playground/validation/schemas/definition:
+    post:
+      tags:
+        - Playground Schema Validation
+      summary: Validate Schema Definition
+      operationId: validateSchemaDefinition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ValidateSchemaDefinitionApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateSchemaDefinitionApiResponse"
+
+  # Validate Schema Content
+  /v1/playground/validation/schemas/content:
+    post:
+      tags:
+        - Playground Schema Validation
+      summary: Validate Schema Content
+      operationId: validateSchemaContent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ValidateSchemaContentApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateSchemaContentApiResponse"
+
+
+  # Validate OpenAPI Schema Definition
+  /v1/playground/validation/openapi/definition:
+    post:
+      tags:
+        - Playground Schema Validation
+      summary: Validate OpenAPI Schema Definition
+      operationId: validateOpenAPIDefinition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ValidateSchemaDefinitionApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateSchemaDefinitionApiResponse"
+
+  # Validate OpenAPI Content
+  /v1/playground/validation/openapi/content:
+    post:
+      tags:
+        - Playground Schema Validation
+      summary: Validate OpenAPI Content
+      operationId: validateOpenAPIContent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ValidateSchemaContentApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateSchemaContentApiResponse"
+
+  # Conversions
+  /v1/playground/conversions:
+    post:
+      tags:
+        - Playground Conversions
+      summary: ContentConversion
+      operationId: convertContent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContentConversionApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContentConversionApiResponse"
+
+
+
+
+components:
+  schemas:
+    # Requests
+    ValidateSchemaDefinitionApiRequest:
+      type: object
+      properties:
+        schema:
+          type: string
+        schemaType:
+          type: string
+    ValidateSchemaContentApiRequest:
+      type: object
+      properties:
+        schema:
+          type: string
+        content:
+          type: string
+        contentType:
+          type: string
+        schemaType:
+          type: string
+    ContentConversionApiRequest:
+      type: object
+      properties:
+        providedType:
+          type: string
+        desiredType:
+          type: string
+        content:
+          type: string
+
+
+
+    # Responses
+    ValidateSchemaDefinitionApiResponse:
+      type: object
+      properties:
+        succeeded:
+          type: boolean
+        errorMessages:
+          type: array
+          items:
+            type: string
+    ValidateSchemaContentApiResponse:
+      type: object
+      properties:
+        succeeded:
+          type: boolean
+        schemaDefinitionSucceeded:
+          type: boolean
+        errorMessages:
+          type: array
+          items:
+            type: string
+        schemaDefinitionErrorMessages:
+          type: array
+          items:
+            type: string
+    ContentConversionApiResponse:
+      type: object
+      properties:
+        result:
+          type: string
+
+    # Common
+    CustomSchemaType:
+      type: string
+      enum:
+        - AVRO
+        - JSON
+        - PROTOBUF
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

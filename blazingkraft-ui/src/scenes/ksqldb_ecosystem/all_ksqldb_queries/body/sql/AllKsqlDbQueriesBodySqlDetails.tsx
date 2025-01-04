@@ -1,0 +1,5 @@
+import AllKsqlDbQueriesBodySqlDetailsComponent from './AllKsqlDbQueriesBodySqlDetailsComponent';
+
+const AllKsqlDbQueriesBodySqlDetails = AllKsqlDbQueriesBodySqlDetailsComponent;
+
+export default AllKsqlDbQueriesBodySqlDetails;

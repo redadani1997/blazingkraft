@@ -1,0 +1,141 @@
+openapi: 3.0.0
+info:
+  description: Audit Api Documentation
+  version: 0.1.0
+  title: Audit Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Audit Search
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /v1/audit/log:
+    post:
+      tags:
+        - Audit Search
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+              type: integer
+              format: int32
+      summary: Search Audit Log
+      operationId: searchAuditLog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditSearchLogApiRequest'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuditSearchLogPageApiResponse"
+
+components:
+  schemas:
+    # Requests
+    AuditSearchLogApiRequest:
+      type: object
+      properties:
+        action:
+          type: string
+        entityType:
+          type: string
+        entity:
+          type: string
+        subject:
+            type: string
+        startTimestamp:
+            type: integer
+            format: int64
+        endTimestamp:
+            type: integer
+            format: int64
+        userIdentifier:
+            type: string
+        userDisplayedName:
+            type: string
+        auditLevel:
+            type: string
+        severity:
+            type: string
+        settledMessage:
+            type: string
+
+
+    # Responses
+    AuditSearchLogPageApiResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuditSearchLogApiResponse"
+        paging:
+          $ref: "#/components/schemas/Paging"
+
+    AuditSearchLogApiResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        action:
+          type: string
+        entityType:
+          type: string
+        entity:
+          type: string
+        subject:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        userIdentifier:
+          type: string
+        userDisplayedName:
+          type: string
+        auditLevel:
+          type: string
+        severity:
+          type: string
+        settledMessage:
+          type: string
+
+    # Common
+    Paging:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

@@ -1,0 +1,60 @@
+/* CONTENT styles */
+/* CONTENT main style */
+.shell-content-small-width {
+    width: 100%;
+    z-index: 1;
+    transition: width 1s ease;
+}
+.shell-content-small-width.shell-navbar-opened{
+    // Do nothing
+}
+.shell-content-small-width.shell-navbar-closed {
+    // Do nothing
+}
+
+.shell-content-medium-width {
+    width: calc(100% - 15rem);
+    z-index: 1;
+    transition: width 1s ease;
+}
+.shell-content-medium-width.shell-navbar-opened{
+    // Do nothing
+}
+.shell-content-medium-width.shell-navbar-closed {
+    width: 100%;
+}
+
+
+
+/* NAVBAR styles */
+.shell-navbar-small-width {
+    width: 0%;
+    z-index: 2;
+    position: absolute;
+    opacity: 0;
+    height: 100%;
+    transition: all 1s ease;
+}
+.shell-navbar-small-width.shell-navbar-opened{
+    width: 15rem;
+    position: absolute;
+    opacity: 1;
+}
+.shell-navbar-small-width.shell-navbar-closed {
+    width: 0%;
+    position: absolute;
+}
+
+.shell-navbar-medium-width {
+    width: 15rem;
+    opacity: 1;
+    z-index: 0;
+    transition: all 1s;
+}
+.shell-navbar-medium-width.shell-navbar-opened{
+    z-index: 2;
+}
+.shell-navbar-medium-width.shell-navbar-closed {
+    width: 0%;
+    opacity: 0;
+}

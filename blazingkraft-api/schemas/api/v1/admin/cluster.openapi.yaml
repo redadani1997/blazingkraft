@@ -1,0 +1,472 @@
+openapi: 3.0.0
+info:
+  description: Cluster Api Documentation
+  version: 0.1.0
+  title: Cluster Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Cluster
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /v1/admin/clusters:
+    # Create Cluster
+    post:
+      tags:
+        - Cluster
+      summary: Create Cluster
+      operationId: createCluster
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClusterCreateApiRequest"
+      responses:
+        201:
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClusterMetaApiResponse"
+
+    # Get All Clusters meta
+    get:
+      tags:
+        - Cluster
+      summary: Get All Clusters meta
+      operationId: getAllClustersMeta
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ClusterMetaApiResponse"
+
+
+  # Edit Cluster
+  /v1/admin/clusters/{clusterCode}/edit:
+    put:
+      tags:
+        - Cluster
+      summary: Edit Cluster
+      operationId: editCluster
+      parameters:
+        - name: clusterCode
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClusterEditApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClusterMetaApiResponse"
+
+  # Delete Cluster
+  /v1/admin/clusters/{clusterCode}/delete:
+    delete:
+      tags:
+        - Cluster
+      summary: Delete Cluster
+      operationId: deleteCluster
+      parameters:
+        - name: clusterCode
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: DELETED
+
+  # Get Cluster meta
+  /v1/admin/clusters/{clusterCode}/meta:
+    get:
+      tags:
+        - Cluster
+      parameters:
+        - name: clusterCode
+          in: path
+          required: true
+          schema:
+            type: string
+      summary: Get Cluster meta
+      operationId: getClusterMeta
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClusterMetaApiResponse"
+
+  # Get Cluster Configuration description
+  /v1/admin/clusters/{clusterCode}/details:
+    get:
+      tags:
+        - Cluster
+      parameters:
+        - name: clusterCode
+          in: path
+          required: true
+          schema:
+            type: string
+      summary: Get Cluster Details
+      operationId: getClusterDetails
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClusterDetailsApiResponse"
+
+  # Test Cluster Client connectivity
+  /v1/admin/clusters/connectivity/client:
+    post:
+      tags:
+        - Cluster
+      summary: Test Cluster Client connectivity
+      operationId: testClusterClientConnectivity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClusterClientConnectivityApiRequest"
+      responses:
+        204:
+          description: NO_CONTENT
+
+  # Test Cluster Jmx connectivity
+  /v1/admin/clusters/connectivity/jmx:
+    post:
+      tags:
+        - Cluster
+      summary: Test Cluster Jmx connectivity
+      operationId: testClusterJmxConnectivity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClusterJmxConnectivityApiRequest"
+      responses:
+        204:
+          description: NO_CONTENT
+
+  # Describe All Clusters
+  /v1/admin/clusters/descriptions:
+    get:
+      tags:
+        - Cluster
+      summary: Describe Clusters
+      operationId: describeClusters
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ClusterDescriptionApiResponse"
+
+  # Describe Cluster
+  /v1/admin/clusters/description:
+    get:
+      tags:
+        - Cluster
+      summary: Describe Cluster
+      operationId: describeCluster
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClusterDescriptionApiResponse"
+
+  # Monitor Cluster
+  /v1/admin/clusters/monitoring:
+    get:
+      tags:
+        - Cluster
+      summary: Monitor Cluster
+      operationId: monitorCluster
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClusterMonitoringApiResponse"
+
+  # Get Cluster Brokers Details
+  /v1/admin/clusters/brokers/details:
+    get:
+      tags:
+        - Cluster
+      summary: Cluster Brokers Details
+      operationId: getClusterBrokersDetails
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ClusterBrokerDetailsApiResponse"
+
+  # Get Cluster Broker Configuration
+  /v1/admin/clusters/brokers/{id}/configuration:
+    get:
+      tags:
+        - Cluster
+      summary: Cluster Broker Configuration
+      operationId: getClusterBrokerConfiguration
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClusterBrokerConfigurationApiResponse"
+
+components:
+  schemas:
+    # Requests
+    ClusterClientConnectivityApiRequest:
+      type: object
+      properties:
+        commonConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+
+    ClusterJmxConnectivityApiRequest:
+      type: object
+      properties:
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+    ClusterCreateApiRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        color:
+          type: string
+        schemaRegistryCode:
+          type: string
+        commonConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        jmxEnabled:
+          type: boolean
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+    ClusterEditApiRequest:
+      type: object
+      properties:
+        color:
+          type: string
+        schemaRegistryCode:
+          type: string
+        commonConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        jmxEnabled:
+          type: boolean
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+    # Responses
+    ClusterMonitoringApiResponse:
+      type: object
+      properties:
+        BytesInPerSecCount:
+          type: string
+        BytesInPerSecMeanRate:
+          type: string
+        BytesOutPerSecCount:
+          type: string
+        BytesOutPerSecMeanRate:
+          type: string
+        TotalFetchRequestsPerSecCount:
+          type: string
+        TotalFetchRequestsPerSecMeanRate:
+          type: string
+        TotalProduceRequestsPerSecCount:
+          type: string
+        TotalProduceRequestsPerSecMeanRate:
+          type: string
+        UnderReplicatedPartitions:
+          type: string
+        LeaderElectionRateAndTimeMsCount:
+          type: string
+        LeaderElectionRateAndTimeMsMeanRate:
+          type: string
+        ActiveControllerCount:
+          type: string
+        OfflinePartitionsCount:
+          type: string
+        TotalTimeMsProduceCount:
+          type: string
+        TotalTimeMsProduceMean:
+          type: string
+        TotalTimeMsFetchCount:
+          type: string
+        TotalTimeMsFetchMean:
+          type: string
+        TotalTimeMsFetchConsumerCount:
+          type: string
+        TotalTimeMsFetchConsumerMean:
+          type: string
+        TotalTimeMsFetchFollowerCount:
+          type: string
+        TotalTimeMsFetchFollowerMean:
+          type: string
+        linux-disk-write-bytes:
+          type: string
+        linux-disk-read-bytes:
+          type: string
+
+    ClusterMetaApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        color:
+          type: string
+        schemaRegistryCode:
+          type: string
+        schemaRegistryName:
+          type: string
+        jmxEnabled:
+          type: boolean
+
+    ClusterDetailsApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        color:
+          type: string
+        schemaRegistryCode:
+          type: string
+        commonConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        jmxEnabled:
+          type: boolean
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+    ClusterDescriptionApiResponse:
+      type: object
+      properties:
+        topics:
+          type: integer
+        kafkaVersion:
+          type: string
+        totalBytesWritten:
+          type: string
+        brokers:
+          type: integer
+
+    ClusterBrokerDetailsApiResponse:
+      type: object
+      properties:
+        totalReplicasSize:
+          type: integer
+          format: int64
+        totalOffsetLag:
+          type: integer
+          format: int64
+        totalBytes:
+          type: integer
+          format: int64
+        usableBytes:
+          type: integer
+          format: int64
+        node:
+          $ref: "#/components/schemas/NodeApiResponse"
+
+    ClusterBrokerConfigurationApiResponse:
+      type: object
+      properties:
+        configuration:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommonKafkaConfigurationApiResponse"
+
+    # Common
+    NodeApiResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        idString:
+          type: string
+        host:
+          type: string
+        port:
+          type: integer
+        rack:
+          type: string
+
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+
+    CommonKafkaConfigurationApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        source:
+          type: string
+        sensitive:
+          type: boolean
+        readOnly:
+          type: boolean
+        type:
+          type: string
+        documentation:
+          type: string

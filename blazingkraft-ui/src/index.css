@@ -1,0 +1,99 @@
+/* @tailwind base; */
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'BlazingKRaftFont';
+  src: local('BlazingKRaftFont'), url(./assets/font-family/BlazingKRaftFont.ttf) format('truetype');
+}
+
+body {
+  margin: 0px;
+  height: 100%;
+  width: 100%;
+  /* overflow: hidden; */
+}
+html {
+  margin: 0px;
+  height: 100%;
+  width: 100%;
+  /* overflow: hidden; */
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+.mantine-ScrollArea-viewport > div {
+  height: 100% !important;
+  display: initial !important;
+  overflow-y: scroll !important;
+}
+
+.mantine-ScrollArea-thumb::before{
+  /* display: none; */
+  min-width: 18px !important;
+}
+
+.mantine-ScrollArea-scrollbar {
+  z-index: 201;
+}
+
+.common-elipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.flex-grow-2 {
+  flex-grow: 2;
+}
+
+.flex-grow-3 {
+  flex-grow: 3;
+}
+
+.flex-grow-4 {
+  flex-grow: 4;
+}
+
+.flex-shrink-1 {
+  flex-shrink: 1;
+}
+
+.flex-shrink-2 {
+  flex-shrink: 2;
+}
+
+.flex-shrink-3 {
+  flex-shrink: 3;
+}
+
+.flex-shrink-4 {
+  flex-shrink: 4;
+}
+
+.grid-col-span-1 {
+  grid-column: span 1;
+}
+
+.grid-col-span-2 {
+  grid-column: span 2;
+}
+
+.grid-col-span-3 {
+  grid-column: span 3;
+}
+
+.grid-col-span-4 {
+  grid-column: span 4;
+}
+
+.grid-template-row-auto-fr {
+  grid-template-rows: auto 1fr;
+}

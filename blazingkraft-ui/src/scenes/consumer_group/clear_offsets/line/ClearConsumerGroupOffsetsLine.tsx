@@ -1,0 +1,5 @@
+import ClearConsumerGroupOffsetsLineComponent from './ClearConsumerGroupOffsetsLineComponent';
+
+const ClearConsumerGroupOffsetsLine = ClearConsumerGroupOffsetsLineComponent;
+
+export default ClearConsumerGroupOffsetsLine;

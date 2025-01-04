@@ -1,0 +1,216 @@
+openapi: 3.0.0
+info:
+  description: Delegation Token Api Documentation
+  version: 0.1.0
+  title: Delegation Token Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Delegation Token
+servers:
+  - url: http://localhost:8080
+
+paths:
+#  createDelegationToken
+
+  # Describe Delegation Tokens
+  /v1/admin/delegation-tokens/describe:
+    post:
+      tags:
+        - Delegation Token
+      summary: Describe Delegation Tokens
+      operationId: describeDelegationTokens
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DelegationTokensDescribeApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DelegationTokenDescribeApiResponse"
+
+  # Renew Delegation Token
+  /v1/admin/delegation-tokens/renew:
+    put:
+      tags:
+        - Delegation Token
+      summary: Renew Delegation Token
+      operationId: renewDelegationToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DelegationTokenRenewApiRequest"
+      responses:
+        201:
+          description: UPDATED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DelegationTokenRenewApiResponse"
+
+  # Expire Delegation Token
+  /v1/admin/delegation-tokens/expire:
+    put:
+      tags:
+        - Delegation Token
+      summary: Expire Delegation Token
+      operationId: expireDelegationToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DelegationTokenExpireApiRequest"
+      responses:
+        201:
+          description: EXPIRED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExpireDelegationTokenApiResponse"
+
+
+  # Create Delegation Token
+  /v1/admin/delegation-tokens/create:
+    post:
+      tags:
+        - Delegation Token
+      summary: Create Delegation Token
+      operationId: createDelegationToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DelegationTokenCreateApiRequest"
+      responses:
+        201:
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DelegationTokenDescribeApiResponse"
+
+components:
+  schemas:
+    # Requests
+    DelegationTokensDescribeApiRequest:
+      type: object
+      properties:
+        owners:
+          type: array
+          items:
+              $ref: "#/components/schemas/KafkaPrincipalApiRequest"
+
+    DelegationTokenRenewApiRequest:
+      type: object
+      properties:
+        hmac:
+          type: string
+        renewTimePeriodMs:
+          type: integer
+          format: int64
+
+    DelegationTokenExpireApiRequest:
+      type: object
+      properties:
+        hmac:
+          type: string
+        expiryTimePeriodMs:
+          type: integer
+          format: int64
+
+    DelegationTokenCreateApiRequest:
+      type: object
+      properties:
+        owner:
+          $ref: "#/components/schemas/KafkaPrincipalApiRequest"
+        renewers:
+          type: array
+          items:
+              $ref: "#/components/schemas/KafkaPrincipalApiRequest"
+        maxLifeTimeMs:
+          type: integer
+          format: int64
+
+    # Responses
+    DelegationTokenDescribeApiResponse:
+      type: object
+      properties:
+        hmac:
+          type: string
+        tokenInformation:
+          $ref: "#/components/schemas/DelegationTokenInformationApiResponse"
+
+    DelegationTokenRenewApiResponse:
+      type: object
+      properties:
+        expiryTimestamp:
+          type: integer
+          format: int64
+
+    ExpireDelegationTokenApiResponse:
+      type: object
+      properties:
+        expiryTimestamp:
+          type: integer
+          format: int64
+
+
+    # Common
+    DelegationTokenInformationApiResponse:
+      type: object
+      properties:
+        owner:
+          $ref: "#/components/schemas/KafkaPrincipalApiResponse"
+        tokenRequester:
+          $ref: "#/components/schemas/KafkaPrincipalApiResponse"
+        renewers:
+          type: array
+          items:
+              $ref: "#/components/schemas/KafkaPrincipalApiResponse"
+        issueTimestamp:
+          type: integer
+          format: int64
+        maxTimestamp:
+          type: integer
+          format: int64
+        expiryTimestamp:
+          type: integer
+          format: int64
+        tokenId:
+          type: string
+
+    KafkaPrincipalApiRequest:
+      type: object
+      properties:
+        principalType:
+          type: string
+        principalName:
+          type: string
+        tokenAuthenticated:
+          type: boolean
+    KafkaPrincipalApiResponse:
+      type: object
+      properties:
+        principalType:
+          type: string
+        principalName:
+          type: string
+        tokenAuthenticated:
+          type: boolean
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

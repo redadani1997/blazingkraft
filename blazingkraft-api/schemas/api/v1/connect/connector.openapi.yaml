@@ -1,0 +1,540 @@
+openapi: 3.0.0
+info:
+  description: Kafka Connect Connector Api Documentation
+  version: 0.1.0
+  title: Kafka Connect Connector Api Documentation
+tags:
+  - name: Kafka Connect Connector
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /v1/kafka-connects/connectors:
+    get:
+      tags:
+        - Kafka Connect Connector
+      operationId: listConnectors
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+          description: default response
+      summary: List all active connectors
+    post:
+      tags:
+        - Kafka Connect Connector
+      operationId: createConnector
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateConnectorApiRequest'
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      summary: Create a new connector
+
+  /v1/kafka-connects/connectors/expand-status:
+    get:
+      tags:
+        - Kafka Connect Connector
+      operationId: listConnectorsWithExpandedStatus
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConnectorInfoWithExpandedStatusApiResponse'
+          description: default response
+      summary: List all active connectors With Expanded Status
+
+  /v1/kafka-connects/connectors/expand-info:
+    get:
+      tags:
+        - Kafka Connect Connector
+      operationId: listConnectorsWithExpandedInfo
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConnectorInfoWithExpandedInfoApiResponse'
+          description: default response
+      summary: List all active connectors With Expanded Info
+
+  /v1/kafka-connects/connectors/expand-info-status:
+    get:
+      tags:
+        - Kafka Connect Connector
+      operationId: listConnectorsWithExpandedInfoAndStatus
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConnectorInfoWithExpandedInfoAndStatusApiResponse'
+          description: default response
+      summary: List all active connectors With Expanded Info and Status
+
+  /v1/kafka-connects/connectors/{connector}:
+    delete:
+      tags:
+        - Kafka Connect Connector
+      operationId: destroyConnector
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      summary: Delete the specified connector
+    get:
+      tags:
+        - Kafka Connect Connector
+      operationId: getConnector
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectorInfoApiResponse'
+          description: default response
+      summary: Get the details for the specified connector
+  /v1/kafka-connects/connectors/{connector}/config:
+    get:
+      tags:
+        - Kafka Connect Connector
+      operationId: getConnectorConfig
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+          description: default response
+      summary: Get the configuration for the specified connector
+    put:
+      tags:
+        - Kafka Connect Connector
+      operationId: putConnectorConfig
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      summary: Create or reconfigure the specified connector
+  /v1/kafka-connects/connectors/{connector}/pause:
+    put:
+      tags:
+        - Kafka Connect Connector
+      description: This operation is idempotent and has no effects if the connector
+        is already paused
+      operationId: pauseConnector
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      summary: Pause the specified connector
+  /v1/kafka-connects/connectors/{connector}/restart:
+    post:
+      tags:
+        - Kafka Connect Connector
+      operationId: restartConnector
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+        - description: Whether to also restart tasks
+          in: query
+          name: includeTasks
+          schema:
+            type: boolean
+            default: false
+        - description: Whether to only restart failed tasks/connectors
+          in: query
+          name: onlyFailed
+          schema:
+            type: boolean
+            default: false
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      summary: Restart the specified connector
+  /v1/kafka-connects/connectors/{connector}/resume:
+    put:
+      tags:
+        - Kafka Connect Connector
+      description: This operation is idempotent and has no effects if the connector
+        is already running
+      operationId: resumeConnector
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      summary: Resume the specified connector
+  /v1/kafka-connects/connectors/{connector}/status:
+    get:
+      tags:
+        - Kafka Connect Connector
+      operationId: getConnectorStatus
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectorStateInfoApiResponse'
+          description: default response
+      summary: Get the status for the specified connector
+  /v1/kafka-connects/connectors/{connector}/topics:
+    get:
+      tags:
+        - Kafka Connect Connector
+      operationId: getConnectorActiveTopics
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      summary: Get the list of topics actively used by the specified connector
+  /v1/kafka-connects/connectors/{connector}/topics/reset:
+    put:
+      tags:
+        - Kafka Connect Connector
+      operationId: resetConnectorActiveTopics
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      summary: Reset the list of topics actively used by the specified connector
+  /v1/kafka-connects/connectors/{connector}/monitoring:
+    post:
+      tags:
+        - Kafka Connect Connector
+      operationId: monitorConnectorTasks
+      parameters:
+        - in: path
+          name: connector
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConnectorTasksMonitoringApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConnectorTasksMonitoringApiResponse"
+      summary: Monitor All Connector Tasks
+
+components:
+  schemas:
+    ConnectorTasksMonitoringApiResponse:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/ConnectorTaskMonitoringApiResponse'
+
+    ConnectorTaskMonitoringApiResponse:
+      type: object
+      properties:
+        # Errors
+        total-record-errors:
+          type: string
+        total-record-failures:
+          type: string
+        total-records-skipped:
+          type: string
+        # Source
+        source-record-poll-total:
+          type: string
+        source-record-poll-rate:
+          type: string
+        source-record-write-total:
+          type: string
+        source-record-write-rate:
+          type: string
+        poll-batch-avg-time-ms:
+          type: string
+        # Sink
+        sink-record-read-rate:
+          type: string
+        sink-record-read-total:
+          type: string
+        sink-record-send-rate:
+          type: string
+        sink-record-send-total:
+          type: string
+        partition-count:
+          type: string
+        put-batch-avg-time-ms:
+          type: string
+        # Common
+        running-ratio:
+          type: string
+        pause-ratio:
+          type: string
+        batch-size-avg:
+          type: string
+
+    ConnectorInfoWithExpandedInfoApiResponse:
+      type: object
+      properties:
+        info:
+          type: object
+          properties:
+            name:
+              type: string
+            config:
+              type: object
+              additionalProperties:
+                type: string
+            tasks:
+              type: array
+              items:
+                $ref: '#/components/schemas/ConnectorTaskIdApiResponse'
+            type:
+              type: string
+
+    ConnectorInfoWithExpandedStatusApiResponse:
+      type: object
+      properties:
+        status:
+          type: object
+          properties:
+            name:
+              type: string
+            connector:
+              type: object
+              properties:
+                state:
+                  type: string
+                worker_id:
+                  type: string
+            tasks:
+              type: array
+              items:
+                type: object
+                properties:
+                  state:
+                    type: string
+                  id:
+                    type: integer
+                  worker_id:
+                    type: string
+            type:
+              type: string
+
+    ConnectorInfoWithExpandedInfoAndStatusApiResponse:
+      type: object
+      properties:
+        info:
+          type: object
+          properties:
+            name:
+              type: string
+            config:
+              type: object
+              additionalProperties:
+                type: string
+            tasks:
+              type: array
+              items:
+                $ref: '#/components/schemas/ConnectorTaskIdApiResponse'
+            type:
+              type: string
+        status:
+          type: object
+          properties:
+            name:
+              type: string
+            connector:
+              type: object
+              properties:
+                state:
+                  type: string
+                worker_id:
+                  type: string
+            tasks:
+              type: array
+              items:
+                type: object
+                properties:
+                  state:
+                    type: string
+                  id:
+                    type: integer
+                  worker_id:
+                    type: string
+            type:
+              type: string
+
+    ConnectorInfoApiResponse:
+      type: object
+      properties:
+        config:
+          type: object
+          additionalProperties:
+            type: string
+        name:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectorTaskIdApiResponse'
+        type:
+          type: string
+    ConnectorStateApiResponse:
+      type: object
+      properties:
+        msg:
+          type: string
+          writeOnly: true
+        state:
+          type: string
+        trace:
+          type: string
+        worker_id:
+          type: string
+    ConnectorStateInfoApiResponse:
+      type: object
+      properties:
+        connector:
+          $ref: '#/components/schemas/ConnectorStateApiResponse'
+        name:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskStateApiResponse'
+        type:
+          type: string
+    ConnectorTaskIdApiResponse:
+      type: object
+      properties:
+        connector:
+          type: string
+        task:
+          type: integer
+          format: int32
+    CreateConnectorApiRequest:
+      type: object
+      properties:
+        config:
+          type: object
+          additionalProperties:
+            type: string
+        name:
+          type: string
+    TaskStateApiResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        msg:
+          type: string
+          writeOnly: true
+        state:
+          type: string
+        trace:
+          type: string
+        worker_id:
+          type: string
+
+
+    # Requests
+    ConnectorTasksMonitoringApiRequest:
+      type: object
+      properties:
+        connectorType:
+          type: string
+        tasks:
+          type: array
+          items:
+            type: integer
+            format: int32

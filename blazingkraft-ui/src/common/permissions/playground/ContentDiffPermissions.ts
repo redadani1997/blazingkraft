@@ -1,0 +1,30 @@
+import { PermissionLabel } from '..';
+
+const CONTENT_DIFF_PERMISSIONS = {
+    CONTENT_DIFF_FEATURE_ENABLED: 'CONTENT_DIFF_FEATURE_ENABLED',
+    CONTENT_DIFF_RUN: 'CONTENT_DIFF_RUN',
+} as const;
+
+const CONTENT_DIFF_PERMISSIONS_LIST = [
+    CONTENT_DIFF_PERMISSIONS.CONTENT_DIFF_FEATURE_ENABLED,
+    CONTENT_DIFF_PERMISSIONS.CONTENT_DIFF_RUN,
+] as const;
+
+const CONTENT_DIFF_PERMISSIONS_LABELS_BY_PERMISSION: PermissionLabel[] = [
+    {
+        label: 'Enable Content Diff Feature',
+        permission: CONTENT_DIFF_PERMISSIONS.CONTENT_DIFF_FEATURE_ENABLED,
+    },
+    {
+        label: 'Run Content Diff',
+        permission: CONTENT_DIFF_PERMISSIONS.CONTENT_DIFF_RUN,
+    },
+];
+
+const ContentDiffPermissions = {
+    CONTENT_DIFF_PERMISSIONS,
+    CONTENT_DIFF_PERMISSIONS_LIST,
+    CONTENT_DIFF_PERMISSIONS_LABELS_BY_PERMISSION,
+};
+
+export { ContentDiffPermissions };

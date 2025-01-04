@@ -1,0 +1,217 @@
+openapi: 3.0.0
+info:
+  description: OIDC Provider Api Documentation
+  version: 0.1.0
+  title: OIDC Provider Api Documentation
+tags:
+  - name: OIDC Provider
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /v1/management/oidc-providers:
+    # Create OIDC Provider
+    post:
+      tags:
+        - OIDC Provider
+      summary: Create OIDC Provider
+      operationId: createOIDCProvider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OIDCProviderCreateApiRequest"
+      responses:
+        201:
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OIDCProviderApiResponse"
+
+    # Get All OIDC Providers
+    get:
+      tags:
+        - OIDC Provider
+      summary: Get All OIDC Providers
+      operationId: getAllOIDCProviders
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OIDCProviderApiResponse"
+
+  # Get OIDC Provider Details
+  /v1/management/oidc-providers/{code}/details:
+    get:
+      tags:
+        - OIDC Provider
+      summary: Get OIDC Provider Details
+      operationId: getOIDCProviderDetails
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OIDCProviderApiResponse"
+
+  /v1/management/oidc-providers/{code}:
+    # Edit OIDC Provider
+    put:
+      tags:
+        - OIDC Provider
+      summary: Edit OIDC Provider
+      operationId: editOIDCProvider
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OIDCProviderEditApiRequest"
+      responses:
+        201:
+          description: EDITED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OIDCProviderApiResponse"
+
+    # Delete OIDC Provider
+    delete:
+      tags:
+        - OIDC Provider
+      summary: Delete OIDC Provider
+      operationId: deleteOIDCProvider
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: NO_CONTENT
+
+
+  /v1/management/oidc-providers/test/connectivity:
+    # Edit OIDC Provider
+    post:
+      tags:
+        - OIDC Provider
+      summary: Test OIDC Provider Connectivity
+      operationId: testOIDCProviderConnectivity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OIDCProviderTestConnectivityApiRequest"
+      responses:
+        200:
+          description: OK
+
+
+components:
+  schemas:
+    # Requests
+    OIDCProviderCreateApiRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        issuer:
+          type: string
+        pkceEnabled:
+          type: boolean
+        providerType:
+          type: string
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+
+    OIDCProviderEditApiRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        issuer:
+          type: string
+        pkceEnabled:
+          type: boolean
+        providerType:
+          type: string
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+
+    OIDCProviderTestConnectivityApiRequest:
+        type: object
+        properties:
+          issuer:
+            type: string
+
+
+
+    # Responses
+    OIDCProviderApiResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        issuer:
+          type: string
+        pkceEnabled:
+          type: boolean
+        providerType:
+          type: string
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        isSystem:
+          type: boolean
+
+
+    # Common
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

@@ -1,0 +1,30 @@
+import { PermissionLabel } from '..';
+
+const KSQLDB_TOPIC_PERMISSIONS = {
+    KSQLDB_TOPIC_FEATURE_ENABLED: 'KSQLDB_TOPIC_FEATURE_ENABLED',
+    DESCRIBE_KSQLDB_TOPICS: 'DESCRIBE_KSQLDB_TOPICS',
+} as const;
+
+const KSQLDB_TOPIC_PERMISSIONS_LIST = [
+    KSQLDB_TOPIC_PERMISSIONS.KSQLDB_TOPIC_FEATURE_ENABLED,
+    KSQLDB_TOPIC_PERMISSIONS.DESCRIBE_KSQLDB_TOPICS,
+] as const;
+
+const KSQLDB_TOPIC_PERMISSIONS_LABELS_BY_PERMISSION: PermissionLabel[] = [
+    {
+        label: 'Enable KsqlDb Topic Feature',
+        permission: KSQLDB_TOPIC_PERMISSIONS.KSQLDB_TOPIC_FEATURE_ENABLED,
+    },
+    {
+        label: 'Describe KsqlDb Topics',
+        permission: KSQLDB_TOPIC_PERMISSIONS.DESCRIBE_KSQLDB_TOPICS,
+    },
+];
+
+const KsqlDbTopicPermissions = {
+    KSQLDB_TOPIC_PERMISSIONS,
+    KSQLDB_TOPIC_PERMISSIONS_LIST,
+    KSQLDB_TOPIC_PERMISSIONS_LABELS_BY_PERMISSION,
+};
+
+export { KsqlDbTopicPermissions };

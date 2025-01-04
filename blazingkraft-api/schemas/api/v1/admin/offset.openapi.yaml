@@ -1,0 +1,216 @@
+openapi: 3.0.0
+info:
+  description: Offset Api Documentation
+  version: 0.1.0
+  title: Offset Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Offset
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Alter Consumer Group Offsets
+  /v1/admin/offsets/alter:
+    put:
+      tags:
+        - Offset
+      summary: Alter Consumer Group Offsets
+      operationId: alterConsumerGroupOffsets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OffsetConsumerGroupAlterApiRequest"
+      responses:
+        204:
+          description: UPDATED
+
+  # List Topic Partitions Offsets
+  /v1/admin/offsets/topic-partitions:
+    post:
+      tags:
+        - Offset
+      summary: List Topic Partitions Offsets
+      operationId: listTopicPartitionsOffsets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OffsetTopicPartitionsListApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OffsetInfoApiResponse"
+
+  # List Consumer Group Offsets
+  /v1/admin/offsets/consumer-group/{consumerGroup}:
+    get:
+      tags:
+        - Offset
+      parameters:
+        - name: consumerGroup
+          in: path
+          description: Consumer Group
+          required: true
+          schema:
+            type: string
+      summary: List Consumer Group Offsets
+      operationId: listConsumerGroupOffsets
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OffsetApiResponse"
+
+  # Delete Consumer Group Offsets
+  /v1/admin/offsets/consumer-group/{consumerGroup}/delete:
+    put:
+      tags:
+        - Offset
+      parameters:
+        - name: consumerGroup
+          in: path
+          description: Consumer Group
+          required: true
+          schema:
+            type: string
+      summary: Delete Consumer Group Offsets
+      operationId: deleteConsumerGroupOffsets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteConsumerGroupOffsetsApiRequest"
+      responses:
+        204:
+          description: DELETED
+components:
+  schemas:
+    # Requests
+    OffsetConsumerGroupAlterApiRequest:
+      type: object
+      properties:
+        groupId:
+          type: string
+        offsetsByTopicPartition:
+          type: array
+          items:
+              $ref: "#/components/schemas/OffsetByTopicPartitionApiRequest"
+
+    OffsetTopicPartitionsListApiRequest:
+        type: object
+        properties:
+          offsetSpecsByTopicPartition:
+            type: array
+            items:
+                $ref: "#/components/schemas/OffsetSpecByTopicPartitionApiRequest"
+          isolationLevel:
+            type: string
+
+    DeleteConsumerGroupOffsetsApiRequest:
+      type: object
+      properties:
+        topicPartitions:
+          type: array
+          items:
+              $ref: "#/components/schemas/TopicPartitionApiRequest"
+
+    # Responses
+
+    # Common
+    OffsetInfoApiResponse:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        timestamp:
+          type: integer
+          format: int64
+        leaderEpoch:
+          type: integer
+          format: int32
+        partition:
+          type: integer
+          format: int32
+        topic:
+          type: string
+
+    OffsetApiResponse:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        metadata:
+          type: string
+        leaderEpoch:
+          type: integer
+          format: int32
+        partition:
+          type: integer
+          format: int32
+        topic:
+          type: string
+
+    OffsetSpecByTopicPartitionApiRequest:
+      type: object
+      properties:
+        topicPartition:
+          $ref: "#/components/schemas/TopicPartitionApiRequest"
+        offsetSpec:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+
+    OffsetByTopicPartitionApiRequest:
+      type: object
+      properties:
+        topicPartition:
+          $ref: "#/components/schemas/TopicPartitionApiRequest"
+        offsetAndMetadata:
+          $ref: "#/components/schemas/OffsetAndMetadataApiRequest"
+
+    OffsetAndMetadataApiRequest:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        metadata:
+          type: string
+        leaderEpoch:
+          type: integer
+          format: int32
+
+    TopicPartitionApiRequest:
+      type: object
+      properties:
+        topic:
+          type: string
+        partition:
+          type: integer
+          format: int32
+
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

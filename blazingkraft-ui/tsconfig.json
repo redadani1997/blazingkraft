@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": false,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "scenes/*": ["src/scenes/*"],
+      "common/*": ["src/common/*"],
+      "kafka/*": ["src/kafka/*"],
+      "hooks/*": ["src/hooks/*"],
+      "assets/*": ["src/assets/*"],
+      "redux_config/*": ["src/redux/*"],
+      "oidc/*": ["src/oidc/*"],
+      "rest/*": ["src/rest/*"],
+    }
+  },
+  "include": ["./src"]
+}

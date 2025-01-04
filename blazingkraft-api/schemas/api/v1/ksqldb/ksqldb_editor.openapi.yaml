@@ -1,0 +1,86 @@
+openapi: 3.0.0
+info:
+  description: KsqlDb Editor Api Documentation
+  version: 0.1.0
+  title: KsqlDb Editor Api Documentation
+tags:
+  - name: KsqlDb Editor
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # KsqlDb Editor Execute Query
+  /v1/ksqldbs/editor/query:
+    post:
+      tags:
+        - KsqlDb Editor
+      summary: Execute Query
+      operationId: executeQuery
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KsqlDbEditorApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/KsqlDbEditorQueryApiResponse"
+
+  # KsqlDb Editor Execute Statement
+  /v1/ksqldbs/editor/statement:
+    post:
+      tags:
+        - KsqlDb Editor
+      summary: Execute Statement
+      operationId: executeStatement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KsqlDbEditorApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KsqlDbEditorStatementApiResponse"
+
+components:
+  schemas:
+    # Requests
+    KsqlDbEditorApiRequest:
+      type: object
+      properties:
+        sql:
+          type: string
+        properties:
+          $ref: "#/components/schemas/CommonMap"
+
+    # Responses
+    KsqlDbEditorQueryApiResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        data:
+          $ref: "#/components/schemas/CommonMap"
+    KsqlDbEditorStatementApiResponse:
+      type: object
+      properties:
+        queryId:
+          type: string
+
+    # Common
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

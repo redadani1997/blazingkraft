@@ -1,0 +1,104 @@
+openapi: 3.0.0
+info:
+  description: Server Permissions Api Documentation
+  version: 0.1.0
+  title: Server Permissions Api Documentation
+tags:
+  - name: Server Permissions
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Get Server Permissions
+  /v1/management/server-permissions:
+    get:
+      tags:
+        - Server Permissions
+      summary: Get Server Permissions
+      operationId: getServerPermissions
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerPermissionsApiResponse"
+
+    # Edit Server Permissions
+    put:
+      tags:
+        - Server Permissions
+      summary: Edit Server Permissions
+      operationId: editServerPermissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServerPermissionsEditApiRequest"
+      responses:
+        201:
+          description: EDITED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerPermissionsApiResponse"
+
+components:
+  schemas:
+    # Requests
+    ServerPermissionsEditApiRequest:
+      type: object
+      properties:
+        clusterPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        kafkaConnectPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        schemaRegistryPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        ksqlDbPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        managementPermissions:
+          type: array
+          items:
+            type: string
+        playgroundPermissions:
+          type: array
+          items:
+            type: string
+
+    # Responses
+    ServerPermissionsApiResponse:
+      type: object
+      properties:
+        clusterPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        kafkaConnectPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        schemaRegistryPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        ksqlDbPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        managementPermissions:
+          type: array
+          items:
+            type: string
+        playgroundPermissions:
+          type: array
+          items:
+            type: string
+
+
+    # Common
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    CommonStringStringArrayMap:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          type: string
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

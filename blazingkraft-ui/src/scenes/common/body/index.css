@@ -1,0 +1,9 @@
+.common-body-outer{
+    padding: 0rem 1rem 0.5rem 1rem;
+    /* height: calc(100% - 6.75rem) !important; */
+    flex: 1;
+}
+
+.common-body-inner{
+    height: 100% !important;
+}

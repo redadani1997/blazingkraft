@@ -1,0 +1,476 @@
+openapi: 3.0.0
+info:
+  description: KsqlDb Server Api Documentation
+  version: 0.1.0
+  title: KsqlDb Server Api Documentation
+tags:
+  - name: KsqlDb Server
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /v1/ksqldbs/servers:
+    # Create KsqlDb Server
+    post:
+      tags:
+        - KsqlDb Server
+      summary: Create KsqlDb Server
+      operationId: createKsqlDbServer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KsqlDbServerCreateApiRequest"
+      responses:
+        201:
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KsqlDbServerMetaApiResponse"
+
+    # Get All KsqlDb Servers meta
+    get:
+      tags:
+        - KsqlDb Server
+      summary: Get All KsqlDb Servers meta
+      operationId: getAllKsqlDbServersMeta
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/KsqlDbServerMetaApiResponse"
+
+  # Edit KsqlDb Server
+  /v1/ksqldbs/servers/{ksqlDbCode}/edit:
+    put:
+      tags:
+        - KsqlDb Server
+      summary: Edit KsqlDb Server
+      operationId: editKsqlDbServer
+      parameters:
+        - name: ksqlDbCode
+          in: path
+          description: KsqlDb Server code
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KsqlDbServerEditApiRequest"
+      responses:
+        201:
+          description: EDITED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KsqlDbServerMetaApiResponse"
+
+  # Delete KsqlDb Server
+  /v1/ksqldbs/servers/{ksqlDbCode}/delete:
+    delete:
+      tags:
+        - KsqlDb Server
+      summary: Delete KsqlDb Server
+      operationId: deleteKsqlDbServer
+      parameters:
+        - name: ksqlDbCode
+          in: path
+          description: KsqlDb Server code
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: DELETED
+
+  # Get KsqlDb Server Details
+  /v1/ksqldbs/servers/{ksqlDbCode}/details:
+    get:
+      tags:
+        - KsqlDb Server
+      summary: Get KsqlDb Server Details
+      operationId: getKsqlDbServerDetails
+      parameters:
+        - name: ksqlDbCode
+          in: path
+          description: KsqlDb Server code
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KsqlDbServerDetailsApiResponse"
+
+  # Monitor KsqlDb Server
+  /v1/ksqldbs/servers/monitoring:
+    get:
+      tags:
+        - KsqlDb Server
+      summary: Monitor KsqlDb Server
+      operationId: monitorKsqlDbServerDetails
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KsqlDbServerMonitoringApiResponse"
+
+  # Get KsqlDb Server meta
+  /v1/ksqldbs/servers/meta:
+    get:
+      tags:
+        - KsqlDb Server
+      summary: Get KsqlDb Server meta
+      operationId: getKsqlDbServerMeta
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KsqlDbServerMetaApiResponse"
+
+  # Test KsqlDb Server Client connectivity
+  /v1/ksqldbs/servers/connectivity/client:
+    post:
+      tags:
+        - KsqlDb Server
+      summary: Test KsqlDb Server Client connectivity
+      operationId: testKsqlDbServerClientConnectivity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KsqlDbServerClientConnectivityApiRequest"
+      responses:
+        204:
+          description: NO_CONTENT
+
+  # Test KsqlDb Server JMX connectivity
+  /v1/ksqldbs/servers/connectivity/jmx:
+    post:
+      tags:
+        - KsqlDb Server
+      summary: Test KsqlDb Server Jmx connectivity
+      operationId: testKsqlDbServerJmxConnectivity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KsqlDbServerJmxConnectivityApiRequest"
+      responses:
+        204:
+          description: NO_CONTENT
+
+  # Describe All KsqlDb Servers
+  /v1/ksqldbs/servers/descriptions:
+    get:
+      tags:
+        - KsqlDb Server
+      summary: Describe KsqlDbServers
+      operationId: describeKsqlDbServers
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/KsqlDbServerDescriptionApiResponse"
+
+  # Describe KsqlDb Server
+  /v1/ksqldbs/servers/description:
+    get:
+      tags:
+        - KsqlDb Server
+      summary: Describe KsqlDb Server
+      operationId: describeKsqlDbServer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KsqlDbServerDescriptionApiResponse"
+
+components:
+  schemas:
+    # Requests
+    KsqlDbServerClientConnectivityApiRequest:
+      type: object
+      properties:
+        host:
+          type: string
+        port:
+          type: integer
+        basicAuthEnabled:
+          type: boolean
+        basicAuthUsername:
+          type: string
+        basicAuthPassword:
+          type: string
+        keyStoreEnabled:
+          type: boolean
+        keyStore:
+          type: string
+        keyStorePassword:
+          type: string
+        trustStoreEnabled:
+          type: boolean
+        trustStore:
+          type: string
+        trustStorePassword:
+          type: string
+        useTls:
+          type: boolean
+        verifyHost:
+          type: boolean
+        useAlpn:
+          type: boolean
+        executeQueryMaxResultRows:
+          type: integer
+
+    KsqlDbServerJmxConnectivityApiRequest:
+      type: object
+      properties:
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+
+    KsqlDbServerCreateApiRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        color:
+          type: string
+        host:
+          type: string
+        port:
+          type: integer
+        basicAuthEnabled:
+          type: boolean
+        basicAuthUsername:
+          type: string
+        basicAuthPassword:
+          type: string
+        keyStoreEnabled:
+          type: boolean
+        keyStore:
+          type: string
+        keyStorePassword:
+          type: string
+        trustStoreEnabled:
+          type: boolean
+        trustStore:
+          type: string
+        trustStorePassword:
+          type: string
+        useTls:
+          type: boolean
+        verifyHost:
+          type: boolean
+        useAlpn:
+          type: boolean
+        executeQueryMaxResultRows:
+          type: integer
+        jmxEnabled:
+          type: boolean
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+
+    KsqlDbServerEditApiRequest:
+      type: object
+      properties:
+        color:
+          type: string
+        host:
+          type: string
+        port:
+          type: integer
+        basicAuthEnabled:
+          type: boolean
+        basicAuthUsername:
+          type: string
+        basicAuthPassword:
+          type: string
+        keyStoreEnabled:
+          type: boolean
+        keyStore:
+          type: string
+        keyStorePassword:
+          type: string
+        trustStoreEnabled:
+          type: boolean
+        trustStore:
+          type: string
+        trustStorePassword:
+          type: string
+        useTls:
+          type: boolean
+        verifyHost:
+          type: boolean
+        useAlpn:
+          type: boolean
+        executeQueryMaxResultRows:
+          type: integer
+        jmxEnabled:
+          type: boolean
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+
+    # Responses
+    KsqlDbServerMetaApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        color:
+          type: string
+        host:
+          type: string
+        port:
+          type: integer
+        jmxEnabled:
+          type: boolean
+
+    KsqlDbServerDetailsApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        color:
+          type: string
+        host:
+          type: string
+        port:
+          type: integer
+        basicAuthEnabled:
+          type: boolean
+        basicAuthUsername:
+          type: string
+        basicAuthPassword:
+          type: string
+        keyStoreEnabled:
+          type: boolean
+        keyStore:
+          type: string
+        keyStorePassword:
+          type: string
+        trustStoreEnabled:
+          type: boolean
+        trustStore:
+          type: string
+        trustStorePassword:
+          type: string
+        useTls:
+          type: boolean
+        verifyHost:
+          type: boolean
+        useAlpn:
+          type: boolean
+        executeQueryMaxResultRows:
+          type: integer
+        jmxEnabled:
+          type: boolean
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+    KsqlDbServerMonitoringApiResponse:
+      type: object
+      properties:
+        # Common
+        bytes-consumed-total:
+          type: string
+        messages-consumed-min:
+          type: string
+        messages-consumed-max:
+          type: string
+        messages-consumed-avg:
+          type: string
+        messages-consumed-per-sec:
+          type: string
+        messages-produced-per-sec:
+          type: string
+        error-rate:
+          type: string
+        # Producer
+        total-messages:
+          type: string
+        messages-per-sec:
+          type: string
+        # Consumer
+        consumer-total-messages:
+          type: string
+        consumer-messages-per-sec:
+          type: string
+        consumer-total-bytes:
+          type: string
+        # Pull Queries
+        pull-query-requests-total:
+          type: string
+        pull-query-requests-rate:
+          type: string
+        pull-query-requests-error-total:
+          type: string
+        pull-query-requests-error-rate:
+          type: string
+        # Node Usage
+        node_storage_free_bytes:
+          type: string
+        node_storage_total_bytes:
+          type: string
+        node_storage_used_bytes:
+          type: string
+        num_stateful_tasks:
+          type: string
+        storage_utilization:
+          type: string
+
+    KsqlDbServerDescriptionApiResponse:
+      type: object
+      properties:
+        serverVersion:
+          type: string
+        kafkaClusterId:
+          type: string
+        ksqlServiceId:
+          type: string
+
+    # Common
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

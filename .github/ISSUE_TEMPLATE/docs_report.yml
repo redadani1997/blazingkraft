@@ -1,0 +1,14 @@
+name: Report an issue with blazingkraft.com website
+description: Nothing is perfect, especially the docs, help us find and fix mistakes, bad wording, etc.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Thanks for reaching out!
+        Before submitting an issue please make sure that there isn't already an open issue describing the same problem.
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+    validations:
+      required: true

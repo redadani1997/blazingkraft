@@ -1,0 +1,248 @@
+openapi: 3.0.0
+info:
+  description: Consumer Group Api Documentation
+  version: 0.1.0
+  title: Consumer Group Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Consumer Group
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Describe consumer group
+  /v1/admin/consumer-groups/descriptions/{consumerGroup}:
+    get:
+      tags:
+        - Consumer Group
+      parameters:
+        - name: consumerGroup
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: includeAuthorizedOperations
+          in: query
+          required: false
+          schema:
+            type: boolean
+      summary: Describe consumer group
+      operationId: describeConsumerGroup
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConsumerGroupDescriptionApiResponse"
+
+  /v1/admin/consumer-groups/descriptions:
+    # Describe specific consumer groups
+    post:
+      tags:
+        - Consumer Group
+      parameters:
+        - name: includeAuthorizedOperations
+          in: query
+          required: false
+          schema:
+            type: boolean
+      summary: Describe specific consumer group
+      operationId: describeSpecificConsumerGroups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConsumerGroupsDescriptionApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConsumerGroupDescriptionApiResponse"
+
+    # Describe all consumer groups
+    get:
+      tags:
+        - Consumer Group
+      parameters:
+        - name: includeAuthorizedOperations
+          in: query
+          required: false
+          schema:
+            type: boolean
+      summary: Describe all consumer groups
+      operationId: describeAllConsumerGroups
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConsumerGroupDescriptionApiResponse"
+
+  # List consumer groups
+  /v1/admin/consumer-groups/listings:
+    get:
+      tags:
+        - Consumer Group
+      summary: List consumer groups
+      operationId: listConsumerGroups
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConsumerGroupListingApiResponse"
+
+  # Delete consumer group
+  /v1/admin/consumer-groups/{consumerGroup}:
+      delete:
+        tags:
+            - Consumer Group
+        parameters:
+          - name: consumerGroup
+            in: path
+            required: true
+            schema:
+              type: string
+        summary: Delete consumer group
+        operationId: deleteConsumerGroup
+        responses:
+          204:
+            description: NO_CONTENT
+
+  # Remove consumer group member
+  /v1/admin/consumer-groups/{consumerGroup}/members/{memberId}:
+    delete:
+      tags:
+        - Consumer Group
+      parameters:
+        - name: reason
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: consumerGroup
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: memberId
+          in: path
+          required: true
+          schema:
+              type: string
+      summary: Remove consumer group member
+      operationId: removeConsumerGroupMember
+      responses:
+        204:
+          description: NO_CONTENT
+
+components:
+  schemas:
+    # Requests
+    ConsumerGroupsDescriptionApiRequest:
+      type: object
+      properties:
+        consumerGroups:
+          type: array
+          items:
+            type: string
+
+    # Responses
+    ConsumerGroupListingApiResponse:
+      type: object
+      properties:
+        groupId:
+          type: string
+        isSimpleConsumerGroup:
+          type: boolean
+        state:
+          type: string
+
+    ConsumerGroupDescriptionApiResponse:
+      type: object
+      properties:
+        authorizedOperations:
+          type: array
+          items:
+            type: string
+        groupId:
+          type: string
+        isSimpleConsumerGroup:
+          type: boolean
+        members:
+          type: array
+          items:
+            $ref: "#/components/schemas/MemberDescriptionApiResponse"
+        partitionAssignor:
+          type: string
+        state:
+          type: string
+        coordinator:
+          $ref: "#/components/schemas/NodeApiResponse"
+
+    # Common
+    MemberDescriptionApiResponse:
+      type: object
+      properties:
+        memberId:
+          type: string
+        clientId:
+          type: string
+        host:
+          type: string
+        groupInstanceId:
+          type: string
+        assignment:
+          $ref: "#/components/schemas/MemberAssignmentApiResponse"
+        authorizedOperations:
+          type: array
+          items:
+              type: string
+
+    MemberAssignmentApiResponse:
+      type: object
+      properties:
+        topicPartitions:
+          type: array
+          items:
+              $ref: "#/components/schemas/TopicPartitionApiResponse"
+    TopicPartitionApiResponse:
+        type: object
+        properties:
+          topic:
+            type: string
+          partition:
+            type: integer
+
+    NodeApiResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        idString:
+          type: string
+        host:
+          type: string
+        port:
+          type: integer
+        rack:
+          type: string
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object

@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Feature request
+    url: https://github.com/redadani1997/blazingkraft/discussions/new?category=feature-requests
+    about: Request new feature
+  - name: Ask a question, give feedback, share your project
+    url: https://github.com/redadani1997/blazingkraft/discussions
+    about: Connect with other community members with GitHub discussions
+  - name: Get help on Discord
+    url: https://discord.gg/mWhWshHMAz
+    about: Get help from the community on Discord

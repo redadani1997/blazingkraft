@@ -1,0 +1,57 @@
+openapi: 3.0.0
+info:
+  description: KsqlDb Stream Api Documentation
+  version: 0.1.0
+  title: KsqlDb Stream Api Documentation
+tags:
+  - name: KsqlDb Stream
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Get All KsqlDb Streams
+  /v1/ksqldbs/streams:
+    get:
+      tags:
+        - KsqlDb Stream
+      summary: Get All KsqlDb Streams
+      operationId: getAllKsqlDbStreams
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/KsqlDbStreamApiResponse"
+
+components:
+  schemas:
+    # Requests
+
+    # Responses
+    KsqlDbStreamApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        topic:
+          type: string
+        format:
+          type: string
+        keyFormat:
+          type: string
+        valueFormat:
+          type: string
+        isWindowed:
+          type: boolean
+
+    # Common
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

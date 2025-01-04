@@ -1,0 +1,17 @@
+name: Docker Build and Push to Staging
+
+on:
+  [workflow_dispatch]
+
+jobs:
+  build_publish_staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        run: echo ${{ secrets.DOCKER_HUB_SECRET }} | docker login -u danireda --password-stdin
+      - name: Prepare Multiarch Buildx
+        run: docker buildx create --name multiarch --use
+      - name: Build
+        run: docker buildx build . -t danireda/blazingkraft-staging:$GITHUB_SHA --platform linux/amd64,linux/arm64 --push

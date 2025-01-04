@@ -1,0 +1,5 @@
+import EditConnectorValidationPreviewComponent from './EditConnectorValidationPreviewComponent';
+
+const EditConnectorValidationPreview = EditConnectorValidationPreviewComponent;
+
+export default EditConnectorValidationPreview;

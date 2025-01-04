@@ -1,0 +1,83 @@
+[versions]
+spring-boot = "3.3.5"
+spring-management = "1.1.6"
+kafka = "7.7.1-ccs"
+ksqldb = "7.4.0"
+confluent = "7.7.1"
+spotless = "6.25.0"
+lombok = "1.18.34"
+flyway = "10.10.0"
+h2 = "2.3.232"
+mysql = "8.0.33"
+postgresql = "42.7.4"
+mariadb = "3.5.0"
+sqlserver = "12.8.0.jre11"
+openapi-plugin = "6.2.1"
+springfox-swagger2 = "3.0.0"
+javax-annotation = "1.3.2"
+javax-servlet = "4.0.1"
+jackson-nullable = "0.2.4"
+commons-text = "1.9"
+commons-lang3 = "3.5"
+commons-collections4 = "4.2"
+commons-io = "2.11.0"
+jakarta-validation = "3.0.0"
+hibernate-validator = "8.0.0.Final"
+spring-authserver = "1.0.1"
+nimbus-jose-jwt = "9.31"
+jackson-databind = "2.14.2"
+openapi-schema-validator = "1.0.7"
+graalvm = "24.1.1"
+
+[libraries]
+spring-slf4j2 = { module = "org.springframework.boot:spring-boot-starter-log4j2", version.ref = "spring-boot" }
+spring-aop = { module = "org.springframework.boot:spring-boot-starter-aop", version.ref = "spring-boot" }
+spring-data = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
+spring-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
+spring-core = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
+spring-ws = { module = "org.springframework.boot:spring-boot-starter-websocket", version.ref = "spring-boot" }
+spring-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring-boot" }
+spring-resourceserver = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "spring-boot" }
+spring-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "spring-boot" }
+spring-authserver = { module = "org.springframework.security:spring-security-oauth2-authorization-server", version.ref = "spring-authserver" }
+apache-client-kafka = { module = "org.apache.kafka:kafka-clients", version.ref = "kafka"}
+ksqldb-client = { module = "io.confluent.ksql:ksqldb-api-client", version.ref = "ksqldb"}
+confluent-client-schemaregistry = { module = "io.confluent:kafka-schema-registry-client", version.ref = "confluent"}
+confluent-serializer-json = { module = "io.confluent:kafka-json-serializer", version.ref = "confluent"}
+confluent-serializer-jsonschema = { module = "io.confluent:kafka-json-schema-serializer", version.ref = "confluent"}
+confluent-serializer-avro = { module = "io.confluent:kafka-avro-serializer", version.ref = "confluent"}
+confluent-serializer-protobuf = { module = "io.confluent:kafka-protobuf-serializer", version.ref = "confluent"}
+flyway = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway-mysql = { module = "org.flywaydb:flyway-mysql", version.ref = "flyway" }
+flyway-sqlserver = { module = "org.flywaydb:flyway-sqlserver", version.ref = "flyway" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+datasource-h2 = { module = "com.h2database:h2", version.ref = "h2" }
+datasource-mysql = { module = "mysql:mysql-connector-java", version.ref = "mysql" }
+datasource-postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+datasource-mariadb = { module = "org.mariadb.jdbc:mariadb-java-client", version.ref = "mariadb" }
+datasource-sqlserver = { module = "com.microsoft.sqlserver:mssql-jdbc", version.ref = "sqlserver" }
+springfox-swagger2 = { module = "io.springfox:springfox-swagger2", version.ref = "springfox-swagger2"}
+javax-annotation = { module = "javax.annotation:javax.annotation-api", version.ref = "javax-annotation"}
+javax-servlet = { module = "javax.servlet:javax.servlet-api", version.ref = "javax-servlet"}
+jakarta-validation = { module = "jakarta.validation:jakarta.validation-api", version.ref = "jakarta-validation"}
+hibernate-validator = { module = "org.hibernate:hibernate-validator", version.ref = "hibernate-validator"}
+jackson-nullable = { module = "org.openapitools:jackson-databind-nullable", version.ref = "jackson-nullable"}
+apache-commons-text = { module = "org.apache.commons:commons-text", version.ref = "commons-text"}
+apache-commons-lang = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang3"}
+apache-commons-collections = { module = "org.apache.commons:commons-collections4", version.ref = "commons-collections4"}
+apache-commons-io = { module = "commons-io:commons-io", version.ref = "commons-io"}
+nimbus-jose-jwt = { module = "com.nimbusds:nimbus-jose-jwt", version.ref = "nimbus-jose-jwt"}
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson-databind"}
+openapi-schema-validator = { module = "org.openapi4j:openapi-schema-validator", version.ref = "openapi-schema-validator"}
+graalvm-js = { module = "org.graalvm.js:js", version.ref = "graalvm"}
+graalvm-js-scriptengine = { module = "org.graalvm.js:js-scriptengine", version.ref = "graalvm"}
+
+[bundles]
+api = ["spring-web"]
+openapi = [ "springfox-swagger2", "jackson-nullable", "jakarta-validation", "hibernate-validator" ]
+
+[plugins]
+spring-management = { id = "io.spring.dependency-management", version.ref = "spring-management" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless"}
+openapi = { id = "org.openapi.generator", version.ref = "openapi-plugin"}

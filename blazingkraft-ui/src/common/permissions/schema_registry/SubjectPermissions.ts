@@ -1,0 +1,67 @@
+import { PermissionLabel } from '..';
+
+const SUBJECT_PERMISSIONS = {
+    SUBJECT_FEATURE_ENABLED: 'SUBJECT_FEATURE_ENABLED',
+    DESCRIBE_SUBJECTS: 'DESCRIBE_SUBJECTS',
+    CREATE_SUBJECT: 'CREATE_SUBJECT',
+    CREATE_SUBJECT_VERSION: 'CREATE_SUBJECT_VERSION',
+    DELETE_SUBJECT: 'DELETE_SUBJECT',
+    DELETE_SUBJECT_VERSION: 'DELETE_SUBJECT_VERSION',
+    UPDATE_SUBJECT_COMPATIBILITY: 'UPDATE_SUBJECT_COMPATIBILITY',
+    UPDATE_SUBJECT_MODE: 'UPDATE_SUBJECT_MODE',
+} as const;
+
+const SUBJECT_PERMISSIONS_LIST = [
+    SUBJECT_PERMISSIONS.SUBJECT_FEATURE_ENABLED,
+    SUBJECT_PERMISSIONS.DESCRIBE_SUBJECTS,
+    SUBJECT_PERMISSIONS.CREATE_SUBJECT,
+    SUBJECT_PERMISSIONS.CREATE_SUBJECT_VERSION,
+    SUBJECT_PERMISSIONS.DELETE_SUBJECT,
+    SUBJECT_PERMISSIONS.DELETE_SUBJECT_VERSION,
+    SUBJECT_PERMISSIONS.UPDATE_SUBJECT_COMPATIBILITY,
+    SUBJECT_PERMISSIONS.UPDATE_SUBJECT_MODE,
+] as const;
+
+const SUBJECT_PERMISSIONS_LABELS_BY_PERMISSION: PermissionLabel[] = [
+    {
+        label: 'Enable Subject Feature',
+        permission: SUBJECT_PERMISSIONS.SUBJECT_FEATURE_ENABLED,
+    },
+    {
+        label: 'Describe Subjects',
+        permission: SUBJECT_PERMISSIONS.DESCRIBE_SUBJECTS,
+    },
+    {
+        label: 'Create Subject',
+        permission: SUBJECT_PERMISSIONS.CREATE_SUBJECT,
+    },
+    {
+        label: 'Create Subject Version',
+        permission: SUBJECT_PERMISSIONS.CREATE_SUBJECT_VERSION,
+    },
+
+    {
+        label: 'Delete Subject',
+        permission: SUBJECT_PERMISSIONS.DELETE_SUBJECT,
+    },
+    {
+        label: 'Delete Subject Version',
+        permission: SUBJECT_PERMISSIONS.DELETE_SUBJECT_VERSION,
+    },
+    {
+        label: 'Update Subject Compatibility',
+        permission: SUBJECT_PERMISSIONS.UPDATE_SUBJECT_COMPATIBILITY,
+    },
+    {
+        label: 'Update Subject Mode',
+        permission: SUBJECT_PERMISSIONS.UPDATE_SUBJECT_MODE,
+    },
+];
+
+const SubjectPermissions = {
+    SUBJECT_PERMISSIONS,
+    SUBJECT_PERMISSIONS_LIST,
+    SUBJECT_PERMISSIONS_LABELS_BY_PERMISSION,
+};
+
+export { SubjectPermissions };

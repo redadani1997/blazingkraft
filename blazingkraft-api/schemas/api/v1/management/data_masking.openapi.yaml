@@ -1,0 +1,165 @@
+openapi: 3.0.0
+info:
+  description: Data Masking Api Documentation
+  version: 0.1.0
+  title: Data Masking Api Documentation
+tags:
+  - name: Data Masking
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /v1/management/data-maskings:
+    # Create Data Masking
+    post:
+      tags:
+        - Data Masking
+      summary: Create Data Masking
+      operationId: createDataMasking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataMaskingCreateApiRequest"
+      responses:
+        201:
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DataMaskingApiResponse"
+
+    # Get All Data Maskings
+    get:
+      tags:
+        - Data Masking
+      summary: Get All Data Maskings
+      operationId: getAllDataMaskings
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DataMaskingApiResponse"
+
+  /v1/management/data-maskings/{dataMaskingCode}:
+    # Edit Data Masking
+    put:
+      tags:
+        - Data Masking
+      summary: Edit Data Masking
+      operationId: editDataMasking
+      parameters:
+        - name: dataMaskingCode
+          in: path
+          description: Data Masking code
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataMaskingEditApiRequest"
+      responses:
+        201:
+          description: EDITED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DataMaskingApiResponse"
+
+    # Delete Data Masking
+    delete:
+      tags:
+        - Data Masking
+      summary: Delete Data Masking
+      operationId: deleteDataMasking
+      parameters:
+        - name: dataMaskingCode
+          in: path
+          description: Data Masking code
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: DELETED
+
+components:
+  schemas:
+    # Requests
+    DataMaskingCreateApiRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        dataMaskingType:
+          type: string
+        rule:
+          type: string
+        ruleType:
+          type: string
+        result:
+          type: string
+        topicType:
+          type: string
+        topic:
+          type: string
+
+    DataMaskingEditApiRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        dataMaskingType:
+          type: string
+        rule:
+          type: string
+        ruleType:
+          type: string
+        result:
+          type: string
+        topicType:
+          type: string
+        topic:
+          type: string
+
+
+    # Responses
+    DataMaskingApiResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        dataMaskingType:
+          type: string
+        rule:
+          type: string
+        ruleType:
+          type: string
+        result:
+          type: string
+        topicType:
+          type: string
+        topic:
+          type: string
+
+
+    # Common
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

@@ -1,0 +1,42 @@
+import { PermissionLabel } from '..';
+
+const CONSUMER_PERMISSIONS = {
+    CONSUMER_FEATURE_ENABLED: 'CONSUMER_FEATURE_ENABLED',
+    CONSUME: 'CONSUME',
+    DESCRIBE_CONSUMER_CONFIGURATION: 'DESCRIBE_CONSUMER_CONFIGURATION',
+    EDIT_CONSUMER_CONFIGURATION: 'EDIT_CONSUMER_CONFIGURATION',
+} as const;
+
+const CONSUMER_PERMISSIONS_LIST = [
+    CONSUMER_PERMISSIONS.CONSUMER_FEATURE_ENABLED,
+    CONSUMER_PERMISSIONS.CONSUME,
+    CONSUMER_PERMISSIONS.DESCRIBE_CONSUMER_CONFIGURATION,
+    CONSUMER_PERMISSIONS.EDIT_CONSUMER_CONFIGURATION,
+] as const;
+
+const CONSUMER_PERMISSIONS_LABELS_BY_PERMISSION: PermissionLabel[] = [
+    {
+        label: 'Enable Consumer Feature',
+        permission: CONSUMER_PERMISSIONS.CONSUMER_FEATURE_ENABLED,
+    },
+    {
+        label: 'Record Consumption',
+        permission: CONSUMER_PERMISSIONS.CONSUME,
+    },
+    {
+        label: 'Describe Consumer Configuration',
+        permission: CONSUMER_PERMISSIONS.DESCRIBE_CONSUMER_CONFIGURATION,
+    },
+    {
+        label: 'Edit Consumer Configuration',
+        permission: CONSUMER_PERMISSIONS.EDIT_CONSUMER_CONFIGURATION,
+    },
+];
+
+const ConsumerPermissions = {
+    CONSUMER_PERMISSIONS,
+    CONSUMER_PERMISSIONS_LIST,
+    CONSUMER_PERMISSIONS_LABELS_BY_PERMISSION,
+};
+
+export { ConsumerPermissions };

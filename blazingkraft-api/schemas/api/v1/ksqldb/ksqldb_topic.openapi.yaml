@@ -1,0 +1,51 @@
+openapi: 3.0.0
+info:
+  description: KsqlDb Topic Api Documentation
+  version: 0.1.0
+  title: KsqlDb Topic Api Documentation
+tags:
+  - name: KsqlDb Topic
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Get All KsqlDb Topics
+  /v1/ksqldbs/topics:
+    get:
+      tags:
+        - KsqlDb Topic
+      summary: Get All KsqlDb Topics
+      operationId: getAllKsqlDbTopics
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/KsqlDbTopicApiResponse"
+
+components:
+  schemas:
+    # Requests
+
+    # Responses
+    KsqlDbTopicApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        partitions:
+          type: integer
+        replicas:
+          type: integer
+
+    # Common
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

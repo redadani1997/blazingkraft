@@ -1,0 +1,42 @@
+import { PermissionLabel } from '..';
+
+const PRODUCER_PERMISSIONS = {
+    PRODUCER_FEATURE_ENABLED: 'PRODUCER_FEATURE_ENABLED',
+    PRODUCE: 'PRODUCE',
+    DESCRIBE_PRODUCER_CONFIGURATION: 'DESCRIBE_PRODUCER_CONFIGURATION',
+    EDIT_PRODUCER_CONFIGURATION: 'EDIT_PRODUCER_CONFIGURATION',
+} as const;
+
+const PRODUCER_PERMISSIONS_LIST = [
+    PRODUCER_PERMISSIONS.PRODUCER_FEATURE_ENABLED,
+    PRODUCER_PERMISSIONS.PRODUCE,
+    PRODUCER_PERMISSIONS.DESCRIBE_PRODUCER_CONFIGURATION,
+    PRODUCER_PERMISSIONS.EDIT_PRODUCER_CONFIGURATION,
+] as const;
+
+const PRODUCER_PERMISSIONS_LABELS_BY_PERMISSION: PermissionLabel[] = [
+    {
+        label: 'Enable Producer Feature',
+        permission: PRODUCER_PERMISSIONS.PRODUCER_FEATURE_ENABLED,
+    },
+    {
+        label: 'Record Production',
+        permission: PRODUCER_PERMISSIONS.PRODUCE,
+    },
+    {
+        label: 'Describe Producer Configuration',
+        permission: PRODUCER_PERMISSIONS.DESCRIBE_PRODUCER_CONFIGURATION,
+    },
+    {
+        label: 'Edit Producer Configuration',
+        permission: PRODUCER_PERMISSIONS.EDIT_PRODUCER_CONFIGURATION,
+    },
+];
+
+const ProducerPermissions = {
+    PRODUCER_PERMISSIONS,
+    PRODUCER_PERMISSIONS_LIST,
+    PRODUCER_PERMISSIONS_LABELS_BY_PERMISSION,
+};
+
+export { ProducerPermissions };

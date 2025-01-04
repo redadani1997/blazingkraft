@@ -1,0 +1,39 @@
+{
+    "typescript.updateImportsOnFileMove.enabled": "never",
+    "javascript.updateImportsOnFileMove.enabled": "never",
+    // "terminal.integrated.fontFamily": "MesloLGS NF Regular",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.validate": [
+        "javascript"
+    ],
+    "workbench.editor.enablePreview": false,
+    "workbench.editor.enablePreviewFromQuickOpen": false,
+    "security.workspace.trust.untrustedFiles": "open",
+    "window.openFilesInNewWindow": "on",
+    "window.openFoldersInNewWindow": "on",
+    "explorer.confirmDelete": false,
+    "eslint.codeAction.showDocumentation": {
+        "enable": false
+    },
+    "liveServer.settings.donotVerifyTags": true,
+    "editor.inlineSuggest.enabled": true,
+    "github.copilot.enable": {
+        "*": true,
+        "yaml": true,
+        "plaintext": true,
+        "markdown": true
+    },
+    "github.copilot.advanced": {},
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    // "editor.acceptSuggestionOnEnter": "off",
+    "editor.wordBasedSuggestions": "off",
+    "editor.quickSuggestions": {
+        "other": false,
+        "comments": false,
+        "strings": false
+    },
+    "emmet.showExpandedAbbreviation": "never"
+}

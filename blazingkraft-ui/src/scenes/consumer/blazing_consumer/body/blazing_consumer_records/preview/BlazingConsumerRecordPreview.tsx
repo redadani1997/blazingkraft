@@ -1,0 +1,5 @@
+import BlazingConsumerRecordPreviewComponent from './BlazingConsumerRecordPreviewComponent';
+
+const BlazingConsumerRecordPreview = BlazingConsumerRecordPreviewComponent;
+
+export default BlazingConsumerRecordPreview;

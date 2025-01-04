@@ -1,0 +1,5 @@
+import AlterConsumerGroupOffsetsLineComponent from './AlterConsumerGroupOffsetsLineComponent';
+
+const AlterConsumerGroupOffsetsLine = AlterConsumerGroupOffsetsLineComponent;
+
+export default AlterConsumerGroupOffsetsLine;

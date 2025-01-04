@@ -1,0 +1,198 @@
+openapi: 3.0.0
+info:
+  description: Consumer Api Documentation
+  version: 0.1.0
+  title: Consumer Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Consumer Configuration
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Update Consumer Configuration
+  /v1/consumer/configuration:
+    put:
+      tags:
+        - Consumer Configuration
+      summary: Update Consumer Configuration
+      operationId: updateConsumerConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsumerConfigurationUpdateApiRequest'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConsumerConfigurationApiResponse"
+    get:
+      tags:
+        - Consumer Configuration
+      summary: Get Consumer Configuration
+      operationId: getConsumerConfiguration
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConsumerConfigurationApiResponse"
+
+  # Export
+  /v1/consumer/export:
+    post:
+      tags:
+        - Consumer Export Records
+      summary: Export Consumer Records
+      operationId: exportConsumerRecords
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsumerExportRecordsApiRequest'
+      responses:
+        204:
+          description: EXPORTED
+
+  # Get Consumer Complete Configuration
+  /v1/consumer/complete-configuration:
+    get:
+      tags:
+        - Consumer Configuration
+      summary: Get Consumer Complete Configuration
+      operationId: getConsumerCompleteConfiguration
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConsumerCompleteConfigurationApiResponse"
+
+components:
+  schemas:
+    # Requests
+    ConsumerConfigurationUpdateApiRequest:
+      type: object
+      properties:
+        mainConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        perRequestKeyDeserializer:
+          type: boolean
+        keyDeserializer:
+          type: string
+        keyDeserializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        perRequestValueDeserializer:
+          type: boolean
+        valueDeserializer:
+          type: string
+        valueDeserializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        pollTimeoutMs:
+          type: integer
+          format: int64
+
+    # Responses
+    ConsumerConfigurationApiResponse:
+      type: object
+      properties:
+        schemaRegistryCode:
+          type: string
+        perRequestKeyDeserializer:
+          type: boolean
+        keyDeserializer:
+          type: string
+        keyDeserializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        perRequestValueDeserializer:
+          type: boolean
+        valueDeserializer:
+          type: string
+        valueDeserializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+
+    ConsumerCompleteConfigurationApiResponse:
+      type: object
+      properties:
+        schemaRegistryCode:
+          type: string
+        perRequestKeyDeserializer:
+          type: boolean
+        keyDeserializer:
+          type: string
+        keyDeserializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        perRequestValueDeserializer:
+          type: boolean
+        valueDeserializer:
+          type: string
+        valueDeserializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        mainConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        commonConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        pollTimeoutMs:
+          type: integer
+          format: int64
+
+    ConsumerExportRecordsApiRequest:
+      type: object
+      properties:
+        exportType:
+          type: string
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConsumerExportRecordApiRequest"
+
+    ConsumerExportRecordApiRequest:
+        type: object
+        properties:
+          key:
+            $ref: "#/components/schemas/ConsumerExportRecordKeyValueApiRequest"
+          value:
+            $ref: "#/components/schemas/ConsumerExportRecordKeyValueApiRequest"
+          headers:
+            $ref: "#/components/schemas/CommonMap"
+          metadata:
+            $ref: "#/components/schemas/CommonMap"
+
+    ConsumerExportRecordKeyValueApiRequest:
+      type: object
+      properties:
+        succeeded:
+          type: boolean
+        errorMessage:
+          type: string
+        payload:
+          type: string
+
+    # Common
+    ConsumerAdditionalConfigurationApiRequest:
+      type: object
+      properties:
+        keyDeserializer:
+          type: string
+        keyDeserializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        valueDeserializer:
+          type: string
+        valueDeserializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

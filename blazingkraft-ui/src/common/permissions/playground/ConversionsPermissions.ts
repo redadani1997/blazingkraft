@@ -1,0 +1,30 @@
+import { PermissionLabel } from '..';
+
+const CONVERSIONS_PERMISSIONS = {
+    CONVERSIONS_FEATURE_ENABLED: 'CONVERSIONS_FEATURE_ENABLED',
+    CONVERSIONS_RUN: 'CONVERSIONS_RUN',
+} as const;
+
+const CONVERSIONS_PERMISSIONS_LIST = [
+    CONVERSIONS_PERMISSIONS.CONVERSIONS_FEATURE_ENABLED,
+    CONVERSIONS_PERMISSIONS.CONVERSIONS_RUN,
+] as const;
+
+const CONVERSIONS_PERMISSIONS_LABELS_BY_PERMISSION: PermissionLabel[] = [
+    {
+        label: 'Enable Conversions Feature',
+        permission: CONVERSIONS_PERMISSIONS.CONVERSIONS_FEATURE_ENABLED,
+    },
+    {
+        label: 'Run Conversions',
+        permission: CONVERSIONS_PERMISSIONS.CONVERSIONS_RUN,
+    },
+];
+
+const ConversionsPermissions = {
+    CONVERSIONS_PERMISSIONS,
+    CONVERSIONS_PERMISSIONS_LIST,
+    CONVERSIONS_PERMISSIONS_LABELS_BY_PERMISSION,
+};
+
+export { ConversionsPermissions };

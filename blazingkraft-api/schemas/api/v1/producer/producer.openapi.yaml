@@ -1,0 +1,273 @@
+openapi: 3.0.0
+info:
+  description: Producer Api Documentation
+  version: 0.1.0
+  title: Producer Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Blazing Producer
+  - name: Producer Configuration
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Update Producer Configuration
+  /v1/producer/configuration:
+    put:
+      tags:
+        - Producer Configuration
+      summary: Update Producer Configuration
+      operationId: updateProducerConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProducerConfigurationUpdateApiRequest'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProducerConfigurationApiResponse"
+    get:
+      tags:
+        - Producer Configuration
+      summary: Get Producer Configuration
+      operationId: getProducerConfiguration
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProducerConfigurationApiResponse"
+
+  # Get Producer Complete Configuration
+  /v1/producer/complete-configuration:
+    get:
+      tags:
+        - Producer Configuration
+      summary: Get Producer Complete Configuration
+      operationId: getProducerCompleteConfiguration
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProducerCompleteConfigurationApiResponse"
+
+  # Produce blazing record
+  /v1/producer/blazing-producer:
+    post:
+      tags:
+        - Blazing Producer
+      summary: Produce Blazing Record
+      operationId: produceBlazingRecord
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlazingProductionApiRequest'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlazingProductionApiResponse"
+
+  # IMPORT Consumer Records
+  /v1/producer/import:
+    post:
+      tags:
+        - Producer Import Records
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                jsonFile:
+                  type: string
+                  format: binary
+                failFast:
+                  type: boolean
+                async:
+                  type: boolean
+                keySchema:
+                  type: string
+                valueSchema:
+                  type: string
+                keySerializer:
+                  type: string
+                keySerializerConfiguration:
+                  type: string
+                valueSerializer:
+                  type: string
+                valueSerializerConfiguration:
+                  type: string
+      summary: Import Producer Records
+      operationId: importProducerRecords
+      responses:
+        201:
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BlazingProductionMetadataOrErrorApiResponse"
+
+
+components:
+  schemas:
+    # Requests
+    ProducerConfigurationUpdateApiRequest:
+      type: object
+      properties:
+        mainConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        perRequestKeySerializer:
+          type: boolean
+        keySerializer:
+          type: string
+        keySerializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        perRequestValueSerializer:
+          type: boolean
+        valueSerializer:
+          type: string
+        valueSerializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+    BlazingProductionApiRequest:
+      type: object
+      properties:
+        topic:
+          type: string
+        partition:
+          type: integer
+        value:
+          type: string
+        key:
+          type: string
+        keySchema:
+          type: string
+        valueSchema:
+          type: string
+        headers:
+          type: string
+        producerAdditionalConfiguration:
+          $ref: "#/components/schemas/ProducerAdditionalConfigurationApiRequest"
+
+    # Responses
+    ProducerConfigurationApiResponse:
+      type: object
+      properties:
+        schemaRegistryCode:
+          type: string
+        perRequestKeySerializer:
+          type: boolean
+        keySerializer:
+          type: string
+        keySerializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        perRequestValueSerializer:
+          type: boolean
+        valueSerializer:
+          type: string
+        valueSerializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+    ProducerCompleteConfigurationApiResponse:
+      type: object
+      properties:
+        schemaRegistryCode:
+          type: string
+        perRequestKeySerializer:
+          type: boolean
+        keySerializer:
+          type: string
+        keySerializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        perRequestValueSerializer:
+          type: boolean
+        valueSerializer:
+          type: string
+        valueSerializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        mainConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        commonConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+    BlazingProductionApiResponse:
+      type: object
+      properties:
+        recordMetadata:
+          $ref: "#/components/schemas/RecordMetadataApiResponse"
+    BlazingProductionMetadataOrErrorApiResponse:
+      type: object
+      properties:
+        recordMetadata:
+          $ref: "#/components/schemas/RecordMetadataApiResponse"
+        recordData:
+          $ref: "#/components/schemas/RecordDataApiResponse"
+        errorMessage:
+          type: string
+        succeeded:
+          type: boolean
+
+    # Common
+    ProducerAdditionalConfigurationApiRequest:
+      type: object
+      properties:
+        keySerializer:
+          type: string
+        keySerializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        valueSerializer:
+          type: string
+        valueSerializerConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+    RecordMetadataApiResponse:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        offset:
+          type: integer
+          format: int64
+        serializedKeySize:
+          type: integer
+        serializedValueSize:
+          type: integer
+        topicPartition:
+          $ref: "#/components/schemas/TopicPartitionApiResponse"
+    RecordDataApiResponse:
+        type: object
+        properties:
+          key:
+            type: string
+          value:
+            type: string
+          headers:
+            type: string
+    TopicPartitionApiResponse:
+      type: object
+      properties:
+        topic:
+          type: string
+        partition:
+          type: integer
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

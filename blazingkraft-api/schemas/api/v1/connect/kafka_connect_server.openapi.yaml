@@ -1,0 +1,375 @@
+openapi: 3.0.0
+info:
+  description: Kafka Connect Server Api Documentation
+  version: 0.1.0
+  title: Kafka Connect Server Api Documentation
+tags:
+  - name: Kafka Connect Server
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /v1/kafka-connects/servers:
+    # Create Kafka Connect Server
+    post:
+      tags:
+        - Kafka Connect Server
+      summary: Create Kafka Connect Server
+      operationId: createKafkaConnectServer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KafkaConnectServerCreateApiRequest"
+      responses:
+        201:
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KafkaConnectServerMetaApiResponse"
+
+    # Get All Kafka Connect Servers meta
+    get:
+      tags:
+        - Kafka Connect Server
+      summary: Get All Kafka Connect Servers meta
+      operationId: getAllKafkaConnectServersMeta
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/KafkaConnectServerMetaApiResponse"
+
+  # Edit Kafka Connect Server
+  /v1/kafka-connects/servers/{kafkaConnectCode}/edit:
+    put:
+      tags:
+        - Kafka Connect Server
+      summary: Edit Kafka Connect Server
+      operationId: editKafkaConnectServer
+      parameters:
+        - name: kafkaConnectCode
+          in: path
+          description: Kafka Connect Server code
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KafkaConnectServerEditApiRequest"
+      responses:
+        201:
+          description: EDITED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KafkaConnectServerMetaApiResponse"
+
+  # Delete Kafka Connect Server
+  /v1/kafka-connects/servers/{kafkaConnectCode}/delete:
+    delete:
+      tags:
+        - Kafka Connect Server
+      summary: Delete Kafka Connect Server
+      operationId: deleteKafkaConnectServer
+      parameters:
+        - name: kafkaConnectCode
+          in: path
+          description: Kafka Connect Server code
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: DELETED
+
+  # Get Kafka Connect Server Details
+  /v1/kafka-connects/servers/{kafkaConnectCode}/details:
+    get:
+      tags:
+        - Kafka Connect Server
+      summary: Get Kafka Connect Server Details
+      operationId: getKafkaConnectServerDetails
+      parameters:
+        - name: kafkaConnectCode
+          in: path
+          description: Kafka Connect Server code
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KafkaConnectServerDetailsApiResponse"
+
+  # Monitor Kafka Connect Server
+  /v1/kafka-connects/servers/monitoring:
+    get:
+      tags:
+        - Kafka Connect Server
+      summary: Monitor Kafka Connect Server
+      operationId: monitorKafkaConnectServerDetails
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KafkaConnectServerMonitoringApiResponse"
+
+  # Get Kafka Connect Server meta
+  /v1/kafka-connects/servers/meta:
+    get:
+      tags:
+        - Kafka Connect Server
+      summary: Get Kafka Connect Server meta
+      operationId: getKafkaConnectServerMeta
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KafkaConnectServerMetaApiResponse"
+
+  # Test Kafka Connect Server Client connectivity
+  /v1/kafka-connects/servers/connectivity/client:
+    post:
+      tags:
+        - Kafka Connect Server
+      summary: Test Kafka Connect Server Client connectivity
+      operationId: testKafkaConnectServerClientConnectivity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KafkaConnectServerClientConnectivityApiRequest"
+      responses:
+        204:
+          description: NO_CONTENT
+
+  # Test Kafka Connect Server JMX connectivity
+  /v1/kafka-connects/servers/connectivity/jmx:
+    post:
+      tags:
+        - Kafka Connect Server
+      summary: Test Kafka Connect Server Jmx connectivity
+      operationId: testKafkaConnectServerJmxConnectivity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KafkaConnectServerJmxConnectivityApiRequest"
+      responses:
+        204:
+          description: NO_CONTENT
+
+  # Describe All Kafka Connect Servers
+  /v1/kafka-connects/servers/descriptions:
+    get:
+      tags:
+        - Kafka Connect Server
+      summary: Describe KafkaConnectServers
+      operationId: describeKafkaConnectServers
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/KafkaConnectServerDescriptionApiResponse"
+
+  # Describe Kafka Connect Server
+  /v1/kafka-connects/servers/description:
+    get:
+      tags:
+        - Kafka Connect Server
+      summary: Describe Kafka Connect Server
+      operationId: describeKafkaConnectServer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KafkaConnectServerDescriptionApiResponse"
+
+components:
+  schemas:
+    # Requests
+    KafkaConnectServerClientConnectivityApiRequest:
+      type: object
+      properties:
+        url:
+          type: string
+        basicAuthEnabled:
+          type: boolean
+        basicAuthUsername:
+          type: string
+        basicAuthPassword:
+          type: string
+
+    KafkaConnectServerJmxConnectivityApiRequest:
+      type: object
+      properties:
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+    KafkaConnectServerCreateApiRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        color:
+          type: string
+        url:
+          type: string
+        basicAuthEnabled:
+          type: boolean
+        basicAuthUsername:
+          type: string
+        basicAuthPassword:
+          type: string
+        clusterCode:
+          type: string
+        jmxEnabled:
+          type: boolean
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+    KafkaConnectServerEditApiRequest:
+      type: object
+      properties:
+        color:
+          type: string
+        url:
+          type: string
+        basicAuthEnabled:
+          type: boolean
+        basicAuthUsername:
+          type: string
+        basicAuthPassword:
+          type: string
+        clusterCode:
+          type: string
+        jmxEnabled:
+          type: boolean
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+
+    # Responses
+    KafkaConnectServerMetaApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        color:
+          type: string
+        clusterCode:
+          type: string
+        clusterName:
+          type: string
+        jmxEnabled:
+          type: boolean
+
+    KafkaConnectServerDetailsApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        color:
+          type: string
+        url:
+          type: string
+        basicAuthEnabled:
+          type: boolean
+        basicAuthUsername:
+          type: string
+        basicAuthPassword:
+          type: string
+        clusterCode:
+          type: string
+        clusterName:
+          type: string
+        jmxEnabled:
+          type: boolean
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+    KafkaConnectServerMonitoringApiResponse:
+      type: object
+      properties:
+        # Connector
+        connector-count:
+          type: string
+        connector-startup-attempts-total:
+          type: string
+        connector-startup-failure-percentage:
+          type: string
+        connector-startup-failure-total:
+          type: string
+        connector-startup-success-percentage:
+          type: string
+        connector-startup-success-total:
+          type: string
+        # Task
+        task-count:
+          type: string
+        task-startup-attempts-total:
+          type: string
+        task-startup-failure-percentage:
+          type: string
+        task-startup-failure-total:
+          type: string
+        task-startup-success-percentage:
+          type: string
+        task-startup-success-total:
+          type: string
+
+
+    KafkaConnectServerDescriptionApiResponse:
+      type: object
+      properties:
+        commit:
+          type: string
+        kafka_cluster_id:
+          type: string
+        version:
+          type: string
+
+
+    # Common
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

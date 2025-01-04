@@ -1,0 +1,167 @@
+openapi: 3.0.0
+info:
+  description: Configuration Api Documentation
+  version: 0.1.0
+  title: Configuration Api Documentation
+tags:
+  - name: Configuration
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Get Configuration
+  /v1/settings/configuration:
+    get:
+      tags:
+        - Configuration
+      summary: Get Configuration
+      operationId: getConfiguration
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfigurationApiResponse"
+
+components:
+  schemas:
+    # Requests
+
+    # Responses
+    ConfigurationApiResponse:
+      type: object
+      properties:
+        connectedUser:
+          $ref: "#/components/schemas/ConnectedUserApiResponse"
+        features:
+          $ref: "#/components/schemas/FeatureApiResponse"
+        serverPermissions:
+          $ref: "#/components/schemas/PermissionsConfigurationApiResponse"
+        userPermissions:
+          $ref: "#/components/schemas/PermissionsConfigurationApiResponse"
+        isBlazingAdmin:
+          type: boolean
+        licenseType:
+          type: string
+
+    PermissionsConfigurationApiResponse:
+      type: object
+      properties:
+        clusterPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        kafkaConnectPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        schemaRegistryPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        ksqlDbPermissions:
+          $ref: "#/components/schemas/CommonStringStringArrayMap"
+        managementPermissions:
+          type: array
+          items:
+            type: string
+        playgroundPermissions:
+          type: array
+          items:
+            type: string
+
+    FeatureApiResponse:
+      type: object
+      properties:
+        clusterFeatures:
+          type: array
+          items:
+            $ref: "#/components/schemas/ClusterFeatureApiResponse"
+        schemaRegistryFeatures:
+          type: array
+          items:
+            $ref: "#/components/schemas/SchemaRegistryFeatureApiResponse"
+        kafkaConnectFeatures:
+          type: array
+          items:
+            $ref: "#/components/schemas/KafkaConnectFeatureApiResponse"
+        ksqlDbFeatures:
+          type: array
+          items:
+            $ref: "#/components/schemas/KsqlDbFeatureApiResponse"
+
+    ConnectedUserApiResponse:
+      type: object
+      properties:
+        identifier:
+          type: string
+        displayedName:
+          type: string
+        picture:
+          type: string
+
+    # Common
+    ClusterFeatureApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        color:
+          type: string
+        schemaRegistryCode:
+          type: string
+        schemaRegistryName:
+          type: string
+        jmxEnabled:
+          type: boolean
+
+    SchemaRegistryFeatureApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        color:
+          type: string
+        jmxEnabled:
+          type: boolean
+
+    KafkaConnectFeatureApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        color:
+          type: string
+        clusterCode:
+          type: string
+        clusterName:
+          type: string
+        jmxEnabled:
+          type: boolean
+
+    KsqlDbFeatureApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        color:
+          type: string
+        jmxEnabled:
+          type: boolean
+
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    CommonStringStringArrayMap:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          type: string
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

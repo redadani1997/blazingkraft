@@ -1,0 +1,141 @@
+openapi: 3.0.0
+info:
+  description: Quota Api Documentation
+  version: 0.1.0
+  title: Quota Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Quota
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Describe Quotas
+  /v1/admin/quotas/describe:
+    post:
+      tags:
+        - Quota
+      summary: Describe Quotas
+      operationId: describeQuotas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuotaDescribeApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuotaDescribeApiResponse"
+
+  # Alter Quotas
+  /v1/admin/quotas/alter:
+    put:
+      tags:
+        - Quota
+      summary: Alter Quotas
+      operationId: alterQuotas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuotaAlterApiRequest"
+      responses:
+        201:
+          description: ALTERED
+
+components:
+  schemas:
+    # Requests
+    QuotaDescribeApiRequest:
+      type: object
+      properties:
+        strict:
+          type: boolean
+        components:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuotaFilterComponentApiRequest"
+    QuotaAlterApiRequest:
+      type: object
+      properties:
+        validateOnly:
+          type: boolean
+        entities:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuotaEntityApiRequest"
+        operations:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuotaOperationApiRequest"
+
+    # Responses
+    QuotaDescribeApiResponse:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuotaEntityApiResponse"
+        quotas:
+          type: array
+          items:
+              $ref: "#/components/schemas/QuotaApiResponse"
+
+
+    # Common
+    QuotaOperationApiRequest:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: number
+          format: double
+    QuotaFilterComponentApiRequest:
+      type: object
+      properties:
+        entityType:
+          type: string
+        matchType:
+          type: integer
+        match:
+          type: string
+    QuotaEntityApiRequest:
+      type: object
+      properties:
+        entityType:
+          type: string
+        entityName:
+          type: string
+    QuotaEntityApiResponse:
+      type: object
+      properties:
+        entityType:
+          type: string
+        entityName:
+          type: string
+    QuotaApiResponse:
+      type: object
+      properties:
+          key:
+            type: string
+          value:
+            type: number
+            format: double
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+

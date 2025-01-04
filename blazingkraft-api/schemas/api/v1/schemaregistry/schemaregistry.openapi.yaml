@@ -1,0 +1,897 @@
+openapi: 3.0.0
+info:
+  description: Schema Registry Api Documentation
+  version: 0.1.0
+  title: Schema Registry Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Schema Registry Subject
+  - name: Schema Registry Server
+  - name: Schema Registry Validation
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # Test the Schema Registry Client Connectivity
+  /v1/schema_registries/connectivity/client:
+    post:
+      tags:
+        - Schema Registry Server
+      summary: Test the Schema Registry Client Connectivity
+      operationId: testSchemaRegistryClientConnectivity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchemaRegistryClientConnectivityApiRequest'
+      responses:
+        204:
+          description: NO_CONTENT
+
+  # Test the Schema Registry JMX Connectivity
+  /v1/schema_registries/connectivity/jmx:
+    post:
+      tags:
+        - Schema Registry Server
+      summary: Test the Schema Registry Jmx Connectivity
+      operationId: testSchemaRegistryJmxConnectivity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchemaRegistryJmxConnectivityApiRequest'
+      responses:
+        204:
+          description: NO_CONTENT
+          
+  # Create/Get Schema Registries
+  /v1/schema_registries:
+    post:
+      tags:
+        - Schema Registry Server
+      summary: Create a Schema Registry
+      operationId: createSchemaRegistry
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchemaRegistryCreateApiRequest'
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SchemaRegistryMetaApiResponse"
+    get:
+      tags:
+        - Schema Registry Server
+      summary: Get all Schema Registries
+      operationId: getSchemaRegistries
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SchemaRegistryMetaApiResponse"
+
+  # Get Schema Registry Details
+  /v1/schema_registries/{schemaRegistryCode}/details:
+    get:
+      tags:
+        - Schema Registry Server
+      summary: Get Schema Registry Details
+      operationId: getSchemaRegistryDetails
+      parameters:
+        - name: schemaRegistryCode
+          in: path
+          description: Schema Registry Code
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SchemaRegistryDetailsApiResponse"
+
+  # Edit Schema Registry
+  /v1/schema_registries/{schemaRegistryCode}/edit:
+    put:
+      tags:
+        - Schema Registry Server
+      summary: Edit Schema Registry
+      operationId: editSchemaRegistry
+      parameters:
+        - name: schemaRegistryCode
+          in: path
+          description: Schema Registry Code
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchemaRegistryEditApiRequest'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SchemaRegistryMetaApiResponse"
+
+  # Delete Schema Registry
+  /v1/schema_registries/{schemaRegistryCode}/delete:
+    delete:
+      tags:
+        - Schema Registry Server
+      summary: Delete Schema Registry
+      operationId: deleteSchemaRegistry
+      parameters:
+        - name: schemaRegistryCode
+          in: path
+          description: Schema Registry Code
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: DELETED
+
+  # Get Schema Registry Configuration
+  /v1/schema_registries/config:
+    get:
+      tags:
+        - Schema Registry Server
+      summary: Get Schema Registry Configuration
+      operationId: getSchemaRegistryConfig
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SchemaRegistryConfigApiResponse"
+
+  # Describe Schema Registry
+  /v1/schema_registries/description:
+    get:
+      tags:
+        - Schema Registry Server
+      summary: Describe Schema Registry
+      operationId: describeSchemaRegistry
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SchemaRegistryDescriptionApiResponse"
+
+  # Update Schema Registry Compatibility
+  /v1/schema_registries/compatibility:
+    put:
+      tags:
+        - Schema Registry Server
+      summary: Update Schema Registry Compatibility
+      operationId: updateSchemaRegistryCompatibility
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompatibilityUpdateApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompatibilityUpdateApiResponse"
+
+  # Update Schema Registry Mode
+  /v1/schema_registries/mode:
+    put:
+      tags:
+        - Schema Registry Server
+      summary: Update Schema Registry Mode
+      operationId: updateSchemaRegistryMode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModeUpdateApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModeUpdateApiResponse"
+
+  # Create Subject
+  /v1/schema_registries/subjects:
+    post:
+      tags:
+        - Schema Registry Subject
+      summary: Create Subject
+      operationId: createSubject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubjectCreateApiRequest"
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubjectDescriptionApiResponse"
+
+  # Create Subject Version
+  /v1/schema_registries/subjects/{subject}/versions:
+    post:
+      parameters:
+        - in: path
+          name: subject
+          required: true
+          schema:
+            type: string
+      tags:
+        - Schema Registry Subject
+      summary: Create Subject Version
+      operationId: createSubjectVersion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubjectVersionCreateApiRequest"
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubjectDescriptionApiResponse"
+
+  # Get Subject Details
+  /v1/schema_registries/subjects/{subject}/details:
+    get:
+      parameters:
+        - in: path
+          name: subject
+          required: true
+          schema:
+            type: string
+      tags:
+        - Schema Registry Subject
+      summary: Get Subject Details
+      operationId: getSubjectDetails
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubjectDetailsApiResponse"
+
+  # Get Topic Subject Details
+  /v1/schema_registries/subjects/topic/{topic}:
+    get:
+      parameters:
+        - in: path
+          name: topic
+          required: true
+          schema:
+            type: string
+      tags:
+        - Schema Registry Subject
+      summary: Get Topic Subject Details
+      operationId: getTopicSubjectDetails
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TopicSubjectDetailsApiResponse"
+
+  # Get All Subjects Metadata
+  /v1/schema_registries/subjects/meta:
+    get:
+      parameters:
+        - in: query
+          name: lookupDeletedSubject
+          required: true
+          schema:
+            type: boolean
+      tags:
+        - Schema Registry Subject
+      summary: Get All Subjects Metadata
+      operationId: getSubjectsMeta
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SubjectMetaApiResponse"
+
+  # Get All Subjects Versions
+  /v1/schema_registries/subjects/versions:
+    get:
+      parameters:
+        - in: query
+          name: lookupDeletedSubject
+          required: true
+          schema:
+            type: boolean
+      tags:
+        - Schema Registry Subject
+      summary: Get All Subjects Versions
+      operationId: getSubjectsVersions
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SubjectVersionsApiResponse"
+
+  # Get All Subjects Descriptions
+  /v1/schema_registries/subjects/descriptions:
+    post:
+      tags:
+        - Schema Registry Subject
+      summary: Get All Subjects Descriptions
+      operationId: getSubjectsDescriptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubjectsDescriptionApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SubjectDescriptionApiResponse"
+
+  # Delete Subject
+  /v1/schema_registries/subjects/{subject}:
+    delete:
+      parameters:
+        - in: path
+          name: subject
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: permanent
+          required: true
+          schema: 
+            type: boolean
+      tags:
+        - Schema Registry Subject
+      summary: Delete Subject
+      operationId: deleteSubject
+      responses:
+        204:
+          description: NO_CONTENT
+
+  # Delete Subject Version
+  /v1/schema_registries/subjects/{subject}/versions/{version}:
+    delete:
+      parameters:
+        - in: path
+          name: subject
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: version
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: permanent
+          required: true
+          schema:
+            type: boolean
+      tags:
+        - Schema Registry Subject
+      summary: Delete Subject Version
+      operationId: deleteSubjectVersion
+      responses:
+        204:
+          description: NO_CONTENT
+
+  # Update Subject Compatibility
+  /v1/schema_registries/subjects/{subject}/compatibility:
+    put:
+      parameters:
+        - in: path
+          name: subject
+          required: true
+          schema:
+            type: string
+      tags:
+        - Schema Registry Subject
+      summary: Update Subject Compatibility
+      operationId: updateSubjectCompatibility
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompatibilityUpdateApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompatibilityUpdateApiResponse"
+
+  # Update Subject Mode
+  /v1/schema_registries/subjects/{subject}/mode:
+    put:
+      parameters:
+        - in: path
+          name: subject
+          required: true
+          schema:
+            type: string
+      tags:
+        - Schema Registry Subject
+      summary: Update Subject Mode
+      operationId: updateSubjectMode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModeUpdateApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModeUpdateApiResponse"
+
+  # Validate Schema Definition
+  /v1/schema_registries/validate/definition:
+    post:
+      tags:
+        - Schema Registry Validation
+      summary: Validate Schema Definition
+      operationId: validateSchemaRegistryDefinition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ValidateSchemaRegistryDefinitionApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateSchemaRegistryDefinitionApiResponse"
+
+  # Validate Schema Content
+  /v1/schema_registries/validate/content:
+    post:
+      tags:
+        - Schema Registry Validation
+      summary: Validate Schema Content
+      operationId: validateSchemaRegistryContent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ValidateSchemaRegistryContentApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateSchemaRegistryContentApiResponse"
+
+  # Validate Schema Compatibility
+  /v1/schema_registries/validate/compatibility:
+    post:
+      tags:
+        - Schema Registry Validation
+      summary: Validate Schema Compatibility
+      operationId: validateSchemaRegistryCompatibility
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ValidateSchemaRegistryCompatibilityApiRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateSchemaRegistryCompatibilityApiResponse"
+
+
+
+
+
+components:
+  schemas:
+    # Requests
+    SchemaRegistryClientConnectivityApiRequest:
+      type: object
+      properties:
+        mainConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        schemaRegistryUrls:
+          type: string
+        schemasCacheSize:
+          type: integer
+
+    SchemaRegistryJmxConnectivityApiRequest:
+      type: object
+      properties:
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+    SchemaRegistryCreateApiRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        color:
+          type: string
+        schemasCacheSize:
+          type: integer
+        schemaRegistryUrls:
+          type: string
+        mainConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        jmxEnabled:
+          type: boolean
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+    SchemaRegistryEditApiRequest:
+      type: object
+      properties:
+        color:
+          type: string
+        schemasCacheSize:
+          type: integer
+        schemaRegistryUrls:
+          type: string
+        mainConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        jmxEnabled:
+          type: boolean
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+    CompatibilityUpdateApiRequest:
+      type: object
+      properties:
+        compatibility:
+          type: string
+      required:
+        - compatibility
+    ModeUpdateApiRequest:
+      type: object
+      properties:
+        mode:
+          type: string
+      required:
+        - mode
+    SubjectCreateApiRequest:
+      type: object
+      properties:
+        schemaType:
+          type: string
+        schema:
+          type: string
+        subject:
+          type: string
+        compatibility:
+          type: string
+        references:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomSchemaReference"
+    SubjectVersionCreateApiRequest:
+      type: object
+      properties:
+        schemaType:
+          type: string
+        schema:
+          type: string
+        references:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomSchemaReference"
+    SubjectsDescriptionApiRequest:
+      type: object
+      properties:
+        subjects:
+          type: array
+          items:
+            type: string
+    ValidateSchemaRegistryDefinitionApiRequest:
+      type: object
+      properties:
+        schema:
+          type: string
+        schemaType:
+          type: string
+        references:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomSchemaReference"
+    ValidateSchemaRegistryContentApiRequest:
+      type: object
+      properties:
+        schema:
+          type: string
+        content:
+          type: string
+        schemaType:
+          type: string
+        references:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomSchemaReference"
+    ValidateSchemaRegistryCompatibilityApiRequest:
+      type: object
+      properties:
+        subject:
+          type: string
+        schema:
+          type: string
+        schemaType:
+          type: string
+        references:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomSchemaReference"
+
+
+
+    # Responses
+    SchemaRegistryMetaApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        schemaRegistryUrls:
+          type: string
+        color:
+          type: string
+        jmxEnabled:
+          type: boolean
+
+    SchemaRegistryDetailsApiResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        color:
+          type: string
+        schemaRegistryUrls:
+          type: string
+        schemasCacheSize:
+          type: integer
+        mainConfiguration:
+          $ref: "#/components/schemas/CommonMap"
+        jmxEnabled:
+          type: boolean
+        jmxUrl:
+          type: string
+        jmxEnvironment:
+          $ref: "#/components/schemas/CommonMap"
+
+    SchemaRegistryConfigApiResponse:
+      type: object
+      properties:
+        mode:
+          type: string
+        compatibility:
+          type: string
+    SchemaRegistryDescriptionApiResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        subjects:
+          type: integer
+        compatibility:
+          type: string
+        mode:
+          type: string
+    CompatibilityUpdateApiResponse:
+      type: object
+      properties:
+        compatibility:
+          type: string
+    ModeUpdateApiResponse:
+      type: object
+      properties:
+        mode:
+          type: string
+    SubjectDescriptionApiResponse:
+      type: object
+      properties:
+        compatibility:
+          type: string
+        mode:
+          type: string
+        subject:
+          type: string
+        latestSchemaVersion:
+          type: integer
+        latestSchemaType:
+          type: string
+    SubjectDetailsApiResponse:
+      type: object
+      properties:
+        compatibility:
+          type: string
+        subject:
+          type: string
+        mode:
+          type: string
+        schemasMetaData:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomSchemaMetadata"
+    TopicSubjectDetailsApiResponse:
+      type: object
+      properties:
+        keySubjectDetails:
+          $ref: "#/components/schemas/SubjectDetailsApiResponse"
+        valueSubjectDetails:
+          $ref: "#/components/schemas/SubjectDetailsApiResponse"
+    SubjectMetaApiResponse:
+      type: object
+      properties:
+        subject:
+          type: string
+    SubjectVersionsApiResponse:
+      type: object
+      properties:
+        subject:
+          type: string
+        versions:
+          type: array
+          items:
+            type: integer
+    ValidateSchemaRegistryDefinitionApiResponse:
+      type: object
+      properties:
+        succeeded:
+          type: boolean
+        errorMessages:
+          type: array
+          items:
+            type: string
+    ValidateSchemaRegistryContentApiResponse:
+      type: object
+      properties:
+        succeeded:
+          type: boolean
+        schemaDefinitionSucceeded:
+          type: boolean
+        errorMessages:
+          type: array
+          items:
+            type: string
+        schemaDefinitionErrorMessages:
+          type: array
+          items:
+            type: string
+    ValidateSchemaRegistryCompatibilityApiResponse:
+      type: object
+      properties:
+        succeeded:
+          type: boolean
+        schemaDefinitionSucceeded:
+          type: boolean
+        errorMessages:
+          type: array
+          items:
+            type: string
+        schemaDefinitionErrorMessages:
+          type: array
+          items:
+            type: string
+
+    # Common
+    CustomCompatibility:
+      type: string
+      enum:
+        - NONE
+        - BACKWARD
+        - BACKWARD_TRANSITIVE
+        - FORWARD
+        - FORWARD_TRANSITIVE
+        - FULL
+        - FULL_TRANSITIVE
+    CustomMode:
+      type: string
+      enum:
+        - READONLY
+        - READWRITE
+        - IMPORT
+        - READONLY_OVERRIDE
+    CustomSchemaType:
+      type: string
+      enum:
+        - AVRO
+        - JSON
+        - PROTOBUF
+    CustomSchemaReference:
+      type: object
+      properties:
+        subject:
+          type: string
+        version:
+          type: integer
+        name:
+          type: string
+    CustomSchemaMetadata:
+      type: object
+      properties:
+        id:
+          type: integer
+        version:
+          type: integer
+        schemaType:
+          type: string
+        schema:
+          type: string
+        references:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomSchemaReference"
+    CommonMap:
+      type: object
+      additionalProperties:
+        type: object
+    NotBlankString:
+      type: string
+      pattern: ^(?!\s*$).+
